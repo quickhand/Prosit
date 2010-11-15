@@ -156,6 +156,12 @@ void Highlighter::highlightBlock(const QString& text)
                 } else if(userprop.compare("H5")==0) {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,-1);
                         hformat.setFontWeight(QFont::Bold);
+                } else if(userprop.compare("BLOCKQUOTE")) {
+                        hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
+                        hformat.setFontItalic(true);
+                } else if(userprop.compare("ATTRIBUTION")) {
+                        hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
+                        hformat.setFontItalic(true);
                 }
 
                 setFormat(0,text.length(),hformat);

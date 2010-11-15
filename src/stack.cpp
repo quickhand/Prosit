@@ -162,7 +162,7 @@ Stack::~Stack()
 
 void Stack::addDocument(Document* document)
 {
-	connect(document, SIGNAL(alignmentChanged()), this, SIGNAL(updateFormatAlignmentActions()));
+        //connect(document, SIGNAL(alignmentChanged()), this, SIGNAL(updateFormatAlignmentActions()));
         connect(document, SIGNAL(headingsChanged()), this, SIGNAL(updateFormatHeadingActions()));
 	connect(document, SIGNAL(changedName()), this, SIGNAL(updateFormatActions()));
 	connect(document, SIGNAL(formattingEnabled(bool)), this, SIGNAL(formattingEnabled(bool)));
@@ -235,31 +235,31 @@ void Stack::waitForThemeBackground()
 
 //-----------------------------------------------------------------------------
 
-void Stack::alignCenter()
-{
-	m_current_document->text()->setAlignment(Qt::AlignCenter);
-}
+//void Stack::alignCenter()
+//{
+//	m_current_document->text()->setAlignment(Qt::AlignCenter);
+//}
 
 //-----------------------------------------------------------------------------
 
-void Stack::alignJustify()
-{
-	m_current_document->text()->setAlignment(Qt::AlignJustify);
-}
+//void Stack::alignJustify()
+//{
+//	m_current_document->text()->setAlignment(Qt::AlignJustify);
+//}
 
 //-----------------------------------------------------------------------------
 
-void Stack::alignLeft()
-{
-	m_current_document->text()->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
-}
+//void Stack::alignLeft()
+//{
+//	m_current_document->text()->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
+//}
 
 //-----------------------------------------------------------------------------
 
-void Stack::alignRight()
-{
-	m_current_document->text()->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
-}
+//void Stack::alignRight()
+//{
+//	m_current_document->text()->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
+//}
 
 //-----------------------------------------------------------------------------
 
@@ -267,6 +267,9 @@ void Stack::setBlockAsHeading1()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.clearProperty(QTextFormat::BlockLeftMargin);
+    format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H1");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -278,6 +281,9 @@ void Stack::setBlockAsHeading2()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.clearProperty(QTextFormat::BlockLeftMargin);
+    format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H2");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -289,6 +295,9 @@ void Stack::setBlockAsHeading3()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.clearProperty(QTextFormat::BlockLeftMargin);
+    format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H3");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -300,6 +309,9 @@ void Stack::setBlockAsHeading4()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.clearProperty(QTextFormat::BlockLeftMargin);
+    format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H4");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -311,7 +323,52 @@ void Stack::setBlockAsHeading5()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.clearProperty(QTextFormat::BlockLeftMargin);
+    format.clearProperty(QTextFormat::BlockRightMargin);
+    format.setAlignment(Qt::AlignLeft);
     format.setProperty (QTextFormat::UserProperty,"H5");
+    cursor.setBlockFormat(format);
+    emit updateFormatHeadingActions();
+}
+
+//-----------------------------------------------------------------------------
+
+void Stack::setBlockAsBlockquote()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setRightMargin(50.0);
+    format.setLeftMargin(50.0);
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.setProperty (QTextFormat::UserProperty,"BLOCKQUOTE");
+    cursor.setBlockFormat(format);
+    emit updateFormatHeadingActions();
+}
+
+//-----------------------------------------------------------------------------
+void Stack::setBlockAsAttribution()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setRightMargin(50.0);
+    format.setLeftMargin(50.0);
+    format.setAlignment(Qt::AlignRight|Qt::AlignTop);
+    format.setProperty (QTextFormat::UserProperty,"ATTRIBUTION");
+
+    cursor.setBlockFormat(format);
+    emit updateFormatHeadingActions();
+}
+
+//-----------------------------------------------------------------------------
+void Stack::setBlockAsPreformatted()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setProperty (QTextFormat::UserProperty,"PRE");
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.clearProperty(QTextFormat::BlockLeftMargin);
+    format.clearProperty(QTextFormat::BlockRightMargin);
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
 }
@@ -322,6 +379,9 @@ void Stack::setBlockAsNormal()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
+    format.clearProperty(QTextFormat::BlockAlignment);
+    format.clearProperty(QTextFormat::BlockLeftMargin);
+    format.clearProperty(QTextFormat::BlockRightMargin);
     format.clearProperty (QTextFormat::UserProperty);
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -361,14 +421,14 @@ void Stack::copy()
 
 //-----------------------------------------------------------------------------
 
-void Stack::decreaseIndent()
-{
-	QTextCursor cursor = m_current_document->text()->textCursor();
-	QTextBlockFormat format = cursor.blockFormat();
-	format.setIndent(format.indent() - 1);
-	cursor.setBlockFormat(format);
-	emit updateFormatActions();
-}
+//void Stack::decreaseIndent()
+//{
+//	QTextCursor cursor = m_current_document->text()->textCursor();
+//	QTextBlockFormat format = cursor.blockFormat();
+//	format.setIndent(format.indent() - 1);
+//	cursor.setBlockFormat(format);
+//	emit updateFormatActions();
+//}
 
 //-----------------------------------------------------------------------------
 
@@ -393,14 +453,14 @@ void Stack::findPrevious()
 
 //-----------------------------------------------------------------------------
 
-void Stack::increaseIndent()
-{
-	QTextCursor cursor = m_current_document->text()->textCursor();
-	QTextBlockFormat format = cursor.blockFormat();
-	format.setIndent(format.indent() + 1);
-	cursor.setBlockFormat(format);
-	emit updateFormatActions();
-}
+//void Stack::increaseIndent()
+//{
+//	QTextCursor cursor = m_current_document->text()->textCursor();
+//	QTextBlockFormat format = cursor.blockFormat();
+//	format.setIndent(format.indent() + 1);
+//	cursor.setBlockFormat(format);
+//	emit updateFormatActions();
+//}
 
 //-----------------------------------------------------------------------------
 
@@ -485,7 +545,7 @@ void Stack::setFontItalic(bool italic)
 
 //-----------------------------------------------------------------------------
 
-void Stack::setFontStrikeOut(bool strikeout)
+void Stack::setFontDeleted(bool strikeout)
 {
 	QTextCharFormat format;
 	format.setFontStrikeOut(strikeout);
@@ -494,56 +554,63 @@ void Stack::setFontStrikeOut(bool strikeout)
 
 //-----------------------------------------------------------------------------
 
-void Stack::setFontUnderline(bool underline)
+void Stack::setFontInserted(bool underline)
 {
 	m_current_document->text()->setFontUnderline(underline);
 }
 
 //-----------------------------------------------------------------------------
 
-void Stack::setFontSuperScript(bool super)
+void Stack::setFontHighlighted(bool highlight)
 {
-	QTextCharFormat format;
-	format.setVerticalAlignment(super ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
-	m_current_document->text()->mergeCurrentCharFormat(format);
+        //m_current_document->text()->setFontUnderline(underline);
 }
 
 //-----------------------------------------------------------------------------
 
-void Stack::setFontSubScript(bool sub)
-{
-	QTextCharFormat format;
-	format.setVerticalAlignment(sub ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);
-	m_current_document->text()->mergeCurrentCharFormat(format);
-}
+//void Stack::setFontSuperScript(bool super)
+//{
+//	QTextCharFormat format;
+//	format.setVerticalAlignment(super ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
+//	m_current_document->text()->mergeCurrentCharFormat(format);
+//}
 
 //-----------------------------------------------------------------------------
 
-void Stack::setTextDirectionLTR()
-{
-	if (m_current_document) {
-		QTextCursor cursor = m_current_document->text()->textCursor();
-		QTextBlockFormat format = cursor.blockFormat();
-		format.setLayoutDirection(Qt::LeftToRight);
-		format.setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
-		cursor.mergeBlockFormat(format);
-		emit updateFormatAlignmentActions();
-	}
-}
+//void Stack::setFontSubScript(bool sub)
+//{
+//	QTextCharFormat format;
+//	format.setVerticalAlignment(sub ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);
+//	m_current_document->text()->mergeCurrentCharFormat(format);
+//}
 
 //-----------------------------------------------------------------------------
 
-void Stack::setTextDirectionRTL()
-{
-	if (m_current_document) {
-		QTextCursor cursor = m_current_document->text()->textCursor();
-		QTextBlockFormat format = cursor.blockFormat();
-		format.setLayoutDirection(Qt::RightToLeft);
-		format.setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
-		cursor.mergeBlockFormat(format);
-		emit updateFormatAlignmentActions();
-	}
-}
+//void Stack::setTextDirectionLTR()
+//{
+//	if (m_current_document) {
+//		QTextCursor cursor = m_current_document->text()->textCursor();
+//		QTextBlockFormat format = cursor.blockFormat();
+//		format.setLayoutDirection(Qt::LeftToRight);
+//		format.setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
+//		cursor.mergeBlockFormat(format);
+//		emit updateFormatAlignmentActions();
+//	}
+//}
+
+//-----------------------------------------------------------------------------
+
+//void Stack::setTextDirectionRTL()
+//{
+//	if (m_current_document) {
+//		QTextCursor cursor = m_current_document->text()->textCursor();
+//		QTextBlockFormat format = cursor.blockFormat();
+//		format.setLayoutDirection(Qt::RightToLeft);
+//		format.setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
+//		cursor.mergeBlockFormat(format);
+//		emit updateFormatAlignmentActions();
+//	}
+//}
 
 //-----------------------------------------------------------------------------
 

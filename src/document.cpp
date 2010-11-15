@@ -89,6 +89,10 @@ Document::Document(const QString& filename, int& current_wordcount, int& current
 	m_text->setMouseTracking(true);
 	m_text->setTabStopWidth(50);
 	m_text->document()->setIndentWidth(50);
+        QTextBlockFormat initblockfmt=m_text->document()->firstBlock().blockFormat();
+        initblockfmt.setBottomMargin(10);
+        QTextCursor startcursor=QTextCursor(m_text->document()->firstBlock());
+        startcursor.setBlockFormat(initblockfmt);
 	m_text->setFrameStyle(QFrame::NoFrame);
 	m_text->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_text->viewport()->setMouseTracking(true);
@@ -464,6 +468,35 @@ bool Document::eventFilter(QObject* watched, QEvent* event)
 		}
 		QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
 		if (!key_event->text().isEmpty()) {
+                        if(m_text->acceptRichText())
+                        {
+                                if(key_event->text().at(0)=='\t')
+                                    return true;
+                                if(key_event->text().at(0).isSpace())
+                                {
+                                    QTextCursor copycurse=QTextCursor(m_text->textCursor());
+
+                                    if(copycurse.position()>copycurse.anchor())
+                                        copycurse.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,copycurse.position()-copycurse.anchor());
+
+                                    if(copycurse.atBlockStart())
+                                    {
+                                        QString uprop=copycurse.blockFormat().stringProperty(QTextFormat::UserProperty);
+                                        if(uprop!="PRE")
+                                            return true;
+                                    }
+
+                                    copycurse.movePosition(QTextCursor::Left);
+                                    copycurse.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor);
+                                    if(copycurse.selectedText().at(0).isSpace())
+                                    {
+                                        QString uprop=m_text->textCursor().blockFormat().stringProperty(QTextFormat::UserProperty);
+                                        if(uprop!="PRE")
+                                            return true;
+
+                                    }
+                                }
+                        }
 			emit keyPressed(key_event->key());
 		}
 		if (SmartQuotes::isEnabled() && SmartQuotes::insert(m_text, key_event)) {
@@ -548,9 +581,51 @@ void Document::wheelEvent(QWheelEvent* event)
 
 void Document::cursorPositionChanged()
 {
-	emit indentChanged(m_text->textCursor().blockFormat().indent());
-	emit alignmentChanged();
+//        static int oldtextblock=-1;
+        //emit indentChanged(m_text->textCursor().blockFormat().indent());
+        //emit alignmentChanged();
         emit headingsChanged();
+//        if(oldtextblock!=-1 && oldtextblock!=m_text->textCursor().blockNumber()&& oldtextblock<m_text->document()->blockCount())
+//        {
+
+//            QTextBlock oldblock=m_text->document()->findBlockByNumber(oldtextblock);
+
+//            QTextCursor blockcursor=QTextCursor(oldblock);
+//            blockcursor.beginEditBlock();
+//            blockcursor.select(QTextCursor::WordUnderCursor);
+//            if(!blockcursor.hasSelection() && oldblock.text().trimmed().length()==0)
+//            {
+//                if(oldblock.blockFormat().hasProperty(QTextFormat::UserProperty))
+//                {
+//                    QString uprop=oldblock.blockFormat().stringProperty(QTextFormat::UserProperty);
+//                    if(!uprop.startsWith("DIVIDER") && uprop!="PRE")
+//                    {
+
+//                        oldtextblock=-1;
+//                        blockcursor.select(QTextCursor::LineUnderCursor);
+//                        blockcursor.deletePreviousChar();
+//                        m_text->setTextCursor(blockcursor);
+//                        blockcursor.endEditBlock();
+//                        return;
+//                    }
+//                }
+//                else
+//                {
+//                    oldtextblock=-1;
+//                    blockcursor.select(QTextCursor::LineUnderCursor);
+
+//                    blockcursor.deletePreviousChar();
+//                    m_text->setTextCursor(blockcursor);
+//                    blockcursor.endEditBlock();
+//                    return;
+//                }
+//            }
+//            blockcursor.endEditBlock();
+
+
+//        }
+
+//        oldtextblock=m_text->textCursor().blockNumber();
 }
 
 //-----------------------------------------------------------------------------

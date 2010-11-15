@@ -73,8 +73,8 @@ signals:
 	void footerVisible(bool visible);
 	void headerVisible(bool visible);
 	void formattingEnabled(bool enabled);
-	void indentChanged(bool indented);
-	void alignmentChanged();
+//	void indentChanged(bool indented);
+        //void alignmentChanged();
         void headingsChanged();
 	void keyPressed(int key);
 

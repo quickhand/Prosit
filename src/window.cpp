@@ -109,7 +109,7 @@ Window::Window()
 	connect(m_documents, SIGNAL(footerVisible(bool)), m_timers->display(), SLOT(setVisible(bool)));
 	connect(m_documents, SIGNAL(formattingEnabled(bool)), this, SLOT(setFormattingEnabled(bool)));
 	connect(m_documents, SIGNAL(updateFormatActions()), this, SLOT(updateFormatActions()));
-	connect(m_documents, SIGNAL(updateFormatAlignmentActions()), this, SLOT(updateFormatAlignmentActions()));
+        //connect(m_documents, SIGNAL(updateFormatAlignmentActions()), this, SLOT(updateFormatAlignmentActions()));
         connect(m_documents, SIGNAL(updateFormatHeadingActions()), this, SLOT(updateFormatHeadingActions()));
 	connect(m_sessions, SIGNAL(themeChanged(Theme)), m_documents, SLOT(themeSelected(Theme)));
 
@@ -285,7 +285,7 @@ void Window::addDocuments(const QStringList& files, const QStringList& positions
 		} else if (m_documents->currentDocument()->isReadOnly() && m_documents->count() > open_files) {
 			readonly.append(files.at(i));
 		}
-		open_files = m_documents->count();
+                open_files = m_documents->count();
 	}
 	if (m_documents->count() == 0) {
 		newDocument();
@@ -422,13 +422,13 @@ void Window::newDocument()
 {
 	addDocument();
 	m_actions["Rename"]->setEnabled(false);
-	if (m_documents->currentDocument()->isRichText()) {
-		if (QApplication::isLeftToRight()) {
-			m_actions["FormatDirectionLTR"]->setChecked(true);
-		} else {
-			m_actions["FormatDirectionRTL"]->setChecked(true);
-		}
-	}
+//	if (m_documents->currentDocument()->isRichText()) {
+//		if (QApplication::isLeftToRight()) {
+//			m_actions["FormatDirectionLTR"]->setChecked(true);
+//		} else {
+//			m_actions["FormatDirectionRTL"]->setChecked(true);
+//		}
+//	}
 }
 
 //-----------------------------------------------------------------------------
@@ -521,7 +521,7 @@ void Window::setFormattingEnabled(bool enabled)
 		action->setEnabled(enabled);
 	}
 	if (enabled) {
-		m_actions["FormatIndentDecrease"]->setEnabled(false);
+                //m_actions["FormatIndentDecrease"]->setEnabled(false);
 		m_richtext_action->setVisible(false);
 		m_plaintext_action->setVisible(true);
 	} else {
@@ -621,7 +621,7 @@ void Window::tabClicked(int index)
 	m_documents->setCurrentDocument(index);
 	updateDetails();
 	updateSave();
-	updateFormatAlignmentActions();
+        //updateFormatAlignmentActions();
         updateFormatHeadingActions();
 	m_documents->currentDocument()->text()->setFocus();
 }
@@ -669,45 +669,45 @@ void Window::updateFormatActions()
 		return;
 	}
 
-        m_actions["FormatIndentDecrease"]->setEnabled(!document->isReadOnly() && document->text()->textCursor().blockFormat().indent() > 0);
+        //m_actions["FormatIndentDecrease"]->setEnabled(!document->isReadOnly() && document->text()->textCursor().blockFormat().indent() > 0);
 
 	QTextCharFormat format = document->text()->currentCharFormat();
 	m_actions["FormatBold"]->setChecked(format.fontWeight() == QFont::Bold);
 	m_actions["FormatItalic"]->setChecked(format.fontItalic());
-	m_actions["FormatStrikeOut"]->setChecked(format.fontStrikeOut());
-	m_actions["FormatUnderline"]->setChecked(format.fontUnderline());
-	m_actions["FormatSuperScript"]->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
-	m_actions["FormatSubScript"]->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
+        m_actions["FormatDeleted"]->setChecked(format.fontStrikeOut());
+        m_actions["FormatInserted"]->setChecked(format.fontUnderline());
+        //m_actions["FormatSuperScript"]->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+        //m_actions["FormatSubScript"]->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 }
 
 //-----------------------------------------------------------------------------
 
-void Window::updateFormatAlignmentActions()
-{
-	Document* document = m_documents->currentDocument();
-	if (!document) {
-		return;
-	}
+//void Window::updateFormatAlignmentActions()
+//{
+//	Document* document = m_documents->currentDocument();
+//	if (!document) {
+//		return;
+//	}
 
-	if (document->text()->textCursor().blockFormat().layoutDirection() == Qt::LeftToRight) {
-		m_actions["FormatDirectionLTR"]->setChecked(true);
-	} else if (document->text()->textCursor().blockFormat().layoutDirection() == Qt::RightToLeft) {
-		m_actions["FormatDirectionRTL"]->setChecked(true);
-	} else {
-		m_actions[QApplication::isLeftToRight() ? "FormatDirectionLTR" : "FormatDirectionRTL"]->setChecked(true);
-	}
+//	if (document->text()->textCursor().blockFormat().layoutDirection() == Qt::LeftToRight) {
+//		m_actions["FormatDirectionLTR"]->setChecked(true);
+//	} else if (document->text()->textCursor().blockFormat().layoutDirection() == Qt::RightToLeft) {
+//		m_actions["FormatDirectionRTL"]->setChecked(true);
+//	} else {
+//		m_actions[QApplication::isLeftToRight() ? "FormatDirectionLTR" : "FormatDirectionRTL"]->setChecked(true);
+//	}
 
-	Qt::Alignment alignment = document->text()->alignment();
-	if (alignment & Qt::AlignLeft) {
-		m_actions["FormatAlignLeft"]->setChecked(true);
-	} else if (alignment & Qt::AlignRight) {
-		m_actions["FormatAlignRight"]->setChecked(true);
-	} else if (alignment & Qt::AlignCenter) {
-		m_actions["FormatAlignCenter"]->setChecked(true);
-	} else if (alignment & Qt::AlignJustify) {
-		m_actions["FormatAlignJustify"]->setChecked(true);
-	}
-}
+//	Qt::Alignment alignment = document->text()->alignment();
+//	if (alignment & Qt::AlignLeft) {
+//		m_actions["FormatAlignLeft"]->setChecked(true);
+//	} else if (alignment & Qt::AlignRight) {
+//		m_actions["FormatAlignRight"]->setChecked(true);
+//	} else if (alignment & Qt::AlignCenter) {
+//		m_actions["FormatAlignCenter"]->setChecked(true);
+//	} else if (alignment & Qt::AlignJustify) {
+//		m_actions["FormatAlignJustify"]->setChecked(true);
+//	}
+//}
 
 //-----------------------------------------------------------------------------
 
@@ -719,15 +719,28 @@ void Window::updateFormatHeadingActions()
         }
 
         QTextBlockFormat block_format=document->text()->textCursor().blockFormat();
+        bool isNormal=false;
+        bool isBlockquote=false;
+        bool isAttribution=false;
+        bool isPreformatted=false;
         int headinglevel=0;
         if(!block_format.hasProperty(QTextFormat::UserProperty)) {
                 headinglevel=0;
+                isNormal=true;
         }
         else {
+
                 QString up=block_format.stringProperty(QTextFormat::UserProperty);
-                if(up.length()>1 && up[1].isDigit()) {
+                if(up.length()>0 && up.startsWith("H") && up[1].isDigit())
                         headinglevel=up[1].digitValue();
-                }
+                else if(up=="BLOCKQUOTE")
+                    isBlockquote=true;
+                else if(up=="ATTRIBUTION")
+                    isAttribution=true;
+                else if(up=="PRE")
+                    isPreformatted=true;
+                else
+                    isNormal=true;
         }
 
         m_actions["FormatSetHeading1"]->setChecked(headinglevel==1);
@@ -735,7 +748,10 @@ void Window::updateFormatHeadingActions()
         m_actions["FormatSetHeading3"]->setChecked(headinglevel==3);
         m_actions["FormatSetHeading4"]->setChecked(headinglevel==4);
         m_actions["FormatSetHeading5"]->setChecked(headinglevel==5);
-        m_actions["FormatSetNormalParagraph"]->setChecked(headinglevel==0||headinglevel>5||headinglevel<0);
+        m_actions["FormatSetBlockquote"]->setChecked(isBlockquote);
+        m_actions["FormatSetAttribution"]->setChecked(isAttribution);
+        m_actions["FormatSetPreformatted"]->setChecked(isPreformatted);
+        m_actions["FormatSetNormalParagraph"]->setChecked(isNormal);
 }
 void Window::updateProgress()
 {
@@ -796,7 +812,7 @@ bool Window::addDocument(const QString& filename, int position)
 	connect(document, SIGNAL(changed()), this, SLOT(updateDetails()));
 	connect(document, SIGNAL(changed()), this, SLOT(updateProgress()));
 	connect(document, SIGNAL(changedName()), this, SLOT(updateSave()));
-	connect(document, SIGNAL(indentChanged(bool)), m_actions["FormatIndentDecrease"], SLOT(setEnabled(bool)));
+        //connect(document, SIGNAL(indentChanged(bool)), m_actions["FormatIndentDecrease"], SLOT(setEnabled(bool)));
 	connect(document, SIGNAL(keyPressed(int)), this, SLOT(keyPressed(int)));
 	connect(document->text()->document(), SIGNAL(modificationChanged(bool)), this, SLOT(updateSave()));
 
@@ -977,7 +993,7 @@ void Window::updateWriteState(int index)
 	foreach (QAction* action, m_format_actions) {
 		action->setEnabled(writable);
 	}
-	m_actions["FormatIndentDecrease"]->setEnabled(writable && document->text()->textCursor().blockFormat().indent() > 0);
+        //m_actions["FormatIndentDecrease"]->setEnabled(writable && document->text()->textCursor().blockFormat().indent() > 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -1029,28 +1045,30 @@ void Window::initMenus()
 	// Create format menu
 	QMenu* format_menu = menuBar()->addMenu(tr("Fo&rmat"));
 
-	m_actions["FormatBold"] = format_menu->addAction(QIcon::fromTheme("format-text-bold"), tr("&Bold"), m_documents, SLOT(setFontBold(bool)), QKeySequence::Bold);
-	m_actions["FormatBold"]->setCheckable(true);
-	m_actions["FormatItalic"] = format_menu->addAction(QIcon::fromTheme("format-text-italic"), tr("&Italic"), m_documents, SLOT(setFontItalic(bool)), QKeySequence::Italic);
+        m_actions["FormatItalic"] = format_menu->addAction(QIcon::fromTheme("format-text-italic"), tr("&Emphasized"), m_documents, SLOT(setFontItalic(bool)), QKeySequence::Italic);
 	m_actions["FormatItalic"]->setCheckable(true);
-	m_actions["FormatUnderline"] = format_menu->addAction(QIcon::fromTheme("format-text-underline"), tr("&Underline"), m_documents, SLOT(setFontUnderline(bool)), QKeySequence::Underline);
-	m_actions["FormatUnderline"]->setCheckable(true);
-	m_actions["FormatStrikeOut"] = format_menu->addAction(QIcon::fromTheme("format-text-strikethrough"), tr("Stri&kethrough"), m_documents, SLOT(setFontStrikeOut(bool)), tr("Ctrl+K"));
-	m_actions["FormatStrikeOut"]->setCheckable(true);
-	m_actions["FormatSuperScript"] = format_menu->addAction(QIcon::fromTheme("format-text-superscript"), tr("Sup&erscript"), m_documents, SLOT(setFontSuperScript(bool)), tr("Ctrl+^"));
-	m_actions["FormatSuperScript"]->setCheckable(true);
-	m_actions["FormatSubScript"] = format_menu->addAction(QIcon::fromTheme("format-text-subscript"), tr("&Subscript"), m_documents, SLOT(setFontSubScript(bool)), tr("Ctrl+_"));
-	m_actions["FormatSubScript"]->setCheckable(true);
+        m_actions["FormatBold"] = format_menu->addAction(QIcon::fromTheme("format-text-bold"), tr("&Strongly Emphasized"), m_documents, SLOT(setFontBold(bool)), QKeySequence::Bold);
+        m_actions["FormatBold"]->setCheckable(true);
+        m_actions["FormatInserted"] = format_menu->addAction(QIcon::fromTheme("format-text-underline"), tr("&Inserted"), m_documents, SLOT(setFontInserted(bool)), QKeySequence::Underline);
+        m_actions["FormatInserted"]->setCheckable(true);
+        m_actions["FormatDeleted"] = format_menu->addAction(QIcon::fromTheme("format-text-strikethrough"), tr("&Deleted"), m_documents, SLOT(setFontDeleted(bool)), tr("Ctrl+K"));
+        m_actions["FormatDeleted"]->setCheckable(true);
+        m_actions["FormatHighlighted"] = format_menu->addAction(QIcon::fromTheme(""), tr("&Highlighted"), m_documents, SLOT(setFontHighlighted(bool)));
+        m_actions["FormatHighlighted"]->setCheckable(true);
+        //m_actions["FormatSuperScript"] = format_menu->addAction(QIcon::fromTheme("format-text-superscript"), tr("Sup&erscript"), m_documents, SLOT(setFontSuperScript(bool)), tr("Ctrl+^"));
+        //m_actions["FormatSuperScript"]->setCheckable(true);
+        //m_actions["FormatSubScript"] = format_menu->addAction(QIcon::fromTheme("format-text-subscript"), tr("&Subscript"), m_documents, SLOT(setFontSubScript(bool)), tr("Ctrl+_"));
+        //m_actions["FormatSubScript"]->setCheckable(true);
 
 	format_menu->addSeparator();
-	m_actions["FormatAlignLeft"] = format_menu->addAction(QIcon::fromTheme("format-justify-left"), tr("Align &Left"), m_documents, SLOT(alignLeft()), tr("Ctrl+{"));
-	m_actions["FormatAlignLeft"]->setCheckable(true);
-	m_actions["FormatAlignCenter"] = format_menu->addAction(QIcon::fromTheme("format-justify-center"), tr("Align &Center"), m_documents, SLOT(alignCenter()), tr("Ctrl+|"));
-	m_actions["FormatAlignCenter"]->setCheckable(true);
-	m_actions["FormatAlignRight"] = format_menu->addAction(QIcon::fromTheme("format-justify-right"), tr("Align &Right"), m_documents, SLOT(alignRight()), tr("Ctrl+}"));
-	m_actions["FormatAlignRight"]->setCheckable(true);
-	m_actions["FormatAlignJustify"] = format_menu->addAction(QIcon::fromTheme("format-justify-fill"), tr("Align &Justify"), m_documents, SLOT(alignJustify()), tr("Ctrl+J"));
-	m_actions["FormatAlignJustify"]->setCheckable(true);
+        //m_actions["FormatAlignLeft"] = format_menu->addAction(QIcon::fromTheme("format-justify-left"), tr("Align &Left"), m_documents, SLOT(alignLeft()), tr("Ctrl+{"));
+        //m_actions["FormatAlignLeft"]->setCheckable(true);
+        //m_actions["FormatAlignCenter"] = format_menu->addAction(QIcon::fromTheme("format-justify-center"), tr("Align &Center"), m_documents, SLOT(alignCenter()), tr("Ctrl+|"));
+        //m_actions["FormatAlignCenter"]->setCheckable(true);
+        //m_actions["FormatAlignRight"] = format_menu->addAction(QIcon::fromTheme("format-justify-right"), tr("Align &Right"), m_documents, SLOT(alignRight()), tr("Ctrl+}"));
+        //m_actions["FormatAlignRight"]->setCheckable(true);
+        //m_actions["FormatAlignJustify"] = format_menu->addAction(QIcon::fromTheme("format-justify-fill"), tr("Align &Justify"), m_documents, SLOT(alignJustify()), tr("Ctrl+J"));
+        //m_actions["FormatAlignJustify"]->setCheckable(true);
         m_actions["FormatSetHeading1"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 1"),m_documents,SLOT(setBlockAsHeading1()));
         m_actions["FormatSetHeading1"]->setCheckable(true);
         m_actions["FormatSetHeading2"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 2"),m_documents,SLOT(setBlockAsHeading2()));
@@ -1061,28 +1079,34 @@ void Window::initMenus()
         m_actions["FormatSetHeading4"]->setCheckable(true);
         m_actions["FormatSetHeading5"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 5"),m_documents,SLOT(setBlockAsHeading5()));
         m_actions["FormatSetHeading5"]->setCheckable(true);
+        m_actions["FormatSetBlockquote"] = format_menu->addAction(QIcon::fromTheme(""),tr("Blockquote"),m_documents,SLOT(setBlockAsBlockquote()));
+        m_actions["FormatSetBlockquote"]->setCheckable(true);
+        m_actions["FormatSetAttribution"] = format_menu->addAction(QIcon::fromTheme(""),tr("Attribution"),m_documents,SLOT(setBlockAsAttribution()));
+        m_actions["FormatSetAttribution"]->setCheckable(true);
+        m_actions["FormatSetPreformatted"] = format_menu->addAction(QIcon::fromTheme(""),tr("Preformatted Text"),m_documents,SLOT(setBlockAsPreformatted()));
+        m_actions["FormatSetPreformatted"]->setCheckable(true);
         m_actions["FormatSetNormalParagraph"] = format_menu->addAction(QIcon::fromTheme(""),tr("Normal Paragraph"),m_documents,SLOT(setBlockAsNormal()));
         m_actions["FormatSetNormalParagraph"]->setCheckable(true);
-	QActionGroup* alignment = new QActionGroup(this);
-	alignment->addAction(m_actions["FormatAlignLeft"]);
-	alignment->addAction(m_actions["FormatAlignCenter"]);
-	alignment->addAction(m_actions["FormatAlignRight"]);
-	alignment->addAction(m_actions["FormatAlignJustify"]);
-	m_actions["FormatAlignLeft"]->setChecked(true);
+        //QActionGroup* alignment = new QActionGroup(this);
+        //alignment->addAction(m_actions["FormatAlignLeft"]);
+        //alignment->addAction(m_actions["FormatAlignCenter"]);
+        //alignment->addAction(m_actions["FormatAlignRight"]);
+        //alignment->addAction(m_actions["FormatAlignJustify"]);
+        //m_actions["FormatAlignLeft"]->setChecked(true);
 
-	format_menu->addSeparator();
-	m_actions["FormatIndentDecrease"] = format_menu->addAction(QIcon::fromTheme("format-indent-less"), tr("&Decrease Indent"), m_documents, SLOT(decreaseIndent()), tr("Ctrl+<"));
-	m_actions["FormatIndentIncrease"] = format_menu->addAction(QIcon::fromTheme("format-indent-more"), tr("I&ncrease Indent"), m_documents, SLOT(increaseIndent()), tr("Ctrl+>"));
+        //format_menu->addSeparator();
+        //m_actions["FormatIndentDecrease"] = format_menu->addAction(QIcon::fromTheme("format-indent-less"), tr("&Decrease Indent"), m_documents, SLOT(decreaseIndent()), tr("Ctrl+<"));
+        //m_actions["FormatIndentIncrease"] = format_menu->addAction(QIcon::fromTheme("format-indent-more"), tr("I&ncrease Indent"), m_documents, SLOT(increaseIndent()), tr("Ctrl+>"));
 
-	format_menu->addSeparator();
-	m_actions["FormatDirectionLTR"] = format_menu->addAction(QIcon::fromTheme("format-text-direction-ltr"), tr("Le&ft to Right Block"), m_documents, SLOT(setTextDirectionLTR()));
-	m_actions["FormatDirectionLTR"]->setCheckable(true);
-	m_actions["FormatDirectionRTL"] = format_menu->addAction(QIcon::fromTheme("format-text-direction-rtl"), tr("Ri&ght to Left Block"), m_documents, SLOT(setTextDirectionRTL()));
-	m_actions["FormatDirectionRTL"]->setCheckable(true);
-	QActionGroup* direction = new QActionGroup(this);
-	direction->addAction(m_actions["FormatDirectionLTR"]);
-	direction->addAction(m_actions["FormatDirectionRTL"]);
-	m_actions["FormatDirectionLTR"]->setChecked(true);
+        //format_menu->addSeparator();
+        //m_actions["FormatDirectionLTR"] = format_menu->addAction(QIcon::fromTheme("format-text-direction-ltr"), tr("Le&ft to Right Block"), m_documents, SLOT(setTextDirectionLTR()));
+        //m_actions["FormatDirectionLTR"]->setCheckable(true);
+        //m_actions["FormatDirectionRTL"] = format_menu->addAction(QIcon::fromTheme("format-text-direction-rtl"), tr("Ri&ght to Left Block"), m_documents, SLOT(setTextDirectionRTL()));
+        //m_actions["FormatDirectionRTL"]->setCheckable(true);
+        //QActionGroup* direction = new QActionGroup(this);
+        //direction->addAction(m_actions["FormatDirectionLTR"]);
+        //direction->addAction(m_actions["FormatDirectionRTL"]);
+        //m_actions["FormatDirectionLTR"]->setChecked(true);
 
 	format_menu->addSeparator();
 	m_plaintext_action = format_menu->addAction(tr("&Make Plain Text"), m_documents, SLOT(makePlainText()));

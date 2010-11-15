@@ -139,11 +139,18 @@ void PROSEUP::Reader::read(const QString& filename, QTextEdit* text)
                                 curblockfmt.setProperty(QTextFormat::UserProperty,QString("DIVIDER")+cur.data[0]);
                             if(text->textCursor().atStart())
                             {
-                                text->textCursor().setBlockFormat(curblockfmt);
+                                QTextBlockFormat temp=QTextBlockFormat(text->textCursor().blockFormat());
+                                temp.merge(curblockfmt);
+                                text->textCursor().setBlockFormat(temp);
                                 text->textCursor().setCharFormat(curformat);
                             }
                             else
-                                text->textCursor().insertBlock(curblockfmt,curformat);
+                            {
+                                QTextBlockFormat temp=QTextBlockFormat(text->textCursor().blockFormat());
+                                temp.merge(curblockfmt);
+                                text->textCursor().setBlockFormat(temp);
+                                text->textCursor().insertBlock(temp,curformat);
+                            }
                         }
                         if(cur.is_end)
                         {
