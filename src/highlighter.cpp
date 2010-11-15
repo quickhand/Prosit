@@ -27,7 +27,7 @@
 #include <QEvent>
 #include <QMenu>
 #include <QTextEdit>
-
+#include <iostream>
 //-----------------------------------------------------------------------------
 
 Highlighter::Highlighter(QTextEdit* text)
@@ -113,7 +113,7 @@ bool Highlighter::eventFilter(QObject* watched, QEvent* event)
 			QStringList guesses = m_dictionary->suggestions(m_word);
 			if (!guesses.isEmpty()) {
 				foreach (const QString& guess, guesses) {
-					menu->addAction(guess);
+                                        menu->addAction(guess);
 				}
 			} else {
 				QAction* none_action = menu->addAction(tr("(No suggestions found)"));
@@ -139,33 +139,83 @@ bool Highlighter::eventFilter(QObject* watched, QEvent* event)
 void Highlighter::highlightBlock(const QString& text)
 {
         QTextCharFormat hformat;
+        QTextBlockFormat blockformat=currentBlock().blockFormat();
         if(currentBlock().blockFormat().hasProperty(QTextFormat::UserProperty)) {
                 QString userprop=currentBlock().blockFormat().stringProperty(QTextFormat::UserProperty);
-                if(userprop.compare("H1")==0) {
+                if(userprop=="H1") {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,3);
                         hformat.setFontWeight(QFont::Bold);
-                } else if(userprop.compare("H2")==0) {
+                        blockformat.setBottomMargin(10.0);
+                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
+                        blockformat.setAlignment(Qt::AlignLeft);
+                } else if(userprop=="H2") {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,2);
                         hformat.setFontWeight(QFont::Bold);
-                } else if(userprop.compare("H3")==0) {
+                        blockformat.setBottomMargin(10.0);
+                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
+                        blockformat.setAlignment(Qt::AlignLeft);
+                } else if(userprop=="H3") {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,1);
                         hformat.setFontWeight(QFont::Bold);
-                } else if(userprop.compare("H4")==0) {
+                        blockformat.setBottomMargin(10.0);
+                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                        blockformat.colorProperty(QTextFormat::BlockRightMargin);
+                        blockformat.setAlignment(Qt::AlignLeft);
+                } else if(userprop=="H4") {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
                         hformat.setFontWeight(QFont::Bold);
-                } else if(userprop.compare("H5")==0) {
+                        blockformat.setBottomMargin(10.0);
+                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
+                        blockformat.setAlignment(Qt::AlignLeft);
+                } else if(userprop=="H5") {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,-1);
                         hformat.setFontWeight(QFont::Bold);
-                } else if(userprop.compare("BLOCKQUOTE")) {
+                        blockformat.setBottomMargin(10.0);
+                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
+                        blockformat.setAlignment(Qt::AlignLeft);
+                } else if(userprop=="BLOCKQUOTE") {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
                         hformat.setFontItalic(true);
-                } else if(userprop.compare("ATTRIBUTION")) {
+                        blockformat.setBottomMargin(10.0);
+                        blockformat.setLeftMargin(50.0);
+                        blockformat.setRightMargin(50.0);
+                        blockformat.setAlignment(Qt::AlignLeft);
+                } else if(userprop=="ATTRIBUTION") {
                         hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
                         hformat.setFontItalic(true);
+                        blockformat.setBottomMargin(10.0);
+                        blockformat.setLeftMargin(50.0);
+                        blockformat.setRightMargin(50.0);
+                        blockformat.setAlignment(Qt::AlignRight);
+                } else if(userprop=="PRE") {
+                        blockformat.clearProperty(QTextFormat::BlockBottomMargin);
+                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
+                        blockformat.setAlignment(Qt::AlignLeft);
+                } else {
+                        blockformat.clearProperty(QTextFormat::BlockBottomMargin);
+                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
+                        blockformat.setAlignment(Qt::AlignLeft);
                 }
 
+                QTextCursor blockcurse=QTextCursor(currentBlock());
+                blockcurse.setBlockFormat(blockformat);
                 setFormat(0,text.length(),hformat);
+        } else {
+                blockformat.setBottomMargin(10.0);
+                blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+                blockformat.clearProperty(QTextFormat::BlockRightMargin);
+                blockformat.setAlignment(Qt::AlignLeft);
+                QTextCursor blockcurse=QTextCursor(currentBlock());
+                blockcurse.setBlockFormat(blockformat);
+
         }
+
 	if (!m_enabled) {
 		return;
 	}

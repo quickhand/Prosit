@@ -122,7 +122,7 @@ void PROSEUP::Reader::read(const QString& filename, QTextEdit* text)
                             curformat.clearBackground();
 
                     }
-                    else
+                    else if(PROSEUP::Token::isBlock(cur.ttype))
                     {
                         if(cur.is_start)
                         {
@@ -139,17 +139,18 @@ void PROSEUP::Reader::read(const QString& filename, QTextEdit* text)
                                 curblockfmt.setProperty(QTextFormat::UserProperty,QString("DIVIDER")+cur.data[0]);
                             if(text->textCursor().atStart())
                             {
-                                QTextBlockFormat temp=QTextBlockFormat(text->textCursor().blockFormat());
-                                temp.merge(curblockfmt);
-                                text->textCursor().setBlockFormat(temp);
+                                //QTextBlockFormat temp=QTextBlockFormat(text->textCursor().blockFormat());
+                                //temp.merge(curblockfmt);
+                                text->textCursor().setBlockFormat(curblockfmt);
                                 text->textCursor().setCharFormat(curformat);
                             }
                             else
                             {
-                                QTextBlockFormat temp=QTextBlockFormat(text->textCursor().blockFormat());
-                                temp.merge(curblockfmt);
-                                text->textCursor().setBlockFormat(temp);
-                                text->textCursor().insertBlock(temp,curformat);
+                                //QTextBlockFormat temp=QTextBlockFormat(text->textCursor().blockFormat());
+                                //temp.merge(curblockfmt);
+                                //std::cout<<"Inserting: "<<temp.stringProperty(QTextFormat::UserProperty).toStdString()<<std::endl;
+                                //text->textCursor().setBlockFormat(temp);
+                                text->textCursor().insertBlock(curblockfmt,curformat);
                             }
                         }
                         if(cur.is_end)
@@ -161,7 +162,7 @@ void PROSEUP::Reader::read(const QString& filename, QTextEdit* text)
                     }
 
 
-                    std::cout<<"["<<tokennames.at(tokenlist[i].ttype).toStdString()<<"["<<tokenlist[i].data.join(",").toStdString()<<"]],";
+                    //std::cout<<"["<<tokennames.at(tokenlist[i].ttype).toStdString()<<"["<<tokenlist[i].data.join(",").toStdString()<<"]],";
                 }
 		file.close();
 	} catch (const QString& error) {

@@ -435,7 +435,7 @@ void Window::newDocument()
 
 void Window::openDocument()
 {
-        QStringList filenames = QFileDialog::getOpenFileNames(window(), tr("Open File"), QString(), tr("Text Files (*.txt *.text *.pup *.proseup);;All Files (*)"));
+        QStringList filenames = QFileDialog::getOpenFileNames(window(), tr("Open File"), QString(), tr("Text Files (*.txt *.text *.proseup);;All Files (*)"));
 	if (!filenames.isEmpty()) {
 		while (QApplication::activeWindow() != this) {
 			QApplication::processEvents();
@@ -1110,7 +1110,7 @@ void Window::initMenus()
 
 	format_menu->addSeparator();
 	m_plaintext_action = format_menu->addAction(tr("&Make Plain Text"), m_documents, SLOT(makePlainText()));
-	m_richtext_action = format_menu->addAction(tr("&Make Rich Text"), m_documents, SLOT(makeRichText()));
+        m_richtext_action = format_menu->addAction(tr("&Make Proseup Text"), m_documents, SLOT(makeRichText()));
 	m_richtext_action->setVisible(false);
 
 	// Create tools menu

@@ -24,6 +24,7 @@
 #include "find_dialog.h"
 #include "smart_quotes.h"
 #include "theme.h"
+#include "color_button.h"
 
 #include <QGridLayout>
 #include <QMessageBox>
@@ -37,6 +38,9 @@
 #include <QTextCursor>
 #include <QThread>
 #include <QTimer>
+#include <QLineEdit>
+#include <QPushButton>
+#include <iostream>
 
 //-----------------------------------------------------------------------------
 
@@ -267,9 +271,9 @@ void Stack::setBlockAsHeading1()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.clearProperty(QTextFormat::BlockAlignment);
-    format.clearProperty(QTextFormat::BlockLeftMargin);
-    format.clearProperty(QTextFormat::BlockRightMargin);
+    //format.clearProperty(QTextFormat::BlockAlignment);
+    //format.clearProperty(QTextFormat::BlockLeftMargin);
+    //format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H1");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -281,9 +285,9 @@ void Stack::setBlockAsHeading2()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.clearProperty(QTextFormat::BlockAlignment);
-    format.clearProperty(QTextFormat::BlockLeftMargin);
-    format.clearProperty(QTextFormat::BlockRightMargin);
+//    format.clearProperty(QTextFormat::BlockAlignment);
+//    format.clearProperty(QTextFormat::BlockLeftMargin);
+//    format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H2");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -295,9 +299,9 @@ void Stack::setBlockAsHeading3()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.clearProperty(QTextFormat::BlockAlignment);
-    format.clearProperty(QTextFormat::BlockLeftMargin);
-    format.clearProperty(QTextFormat::BlockRightMargin);
+//    format.clearProperty(QTextFormat::BlockAlignment);
+//    format.clearProperty(QTextFormat::BlockLeftMargin);
+//    format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H3");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -309,9 +313,9 @@ void Stack::setBlockAsHeading4()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.clearProperty(QTextFormat::BlockAlignment);
-    format.clearProperty(QTextFormat::BlockLeftMargin);
-    format.clearProperty(QTextFormat::BlockRightMargin);
+//    format.clearProperty(QTextFormat::BlockAlignment);
+//    format.clearProperty(QTextFormat::BlockLeftMargin);
+//    format.clearProperty(QTextFormat::BlockRightMargin);
     format.setProperty (QTextFormat::UserProperty,"H4");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -323,10 +327,10 @@ void Stack::setBlockAsHeading5()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.clearProperty(QTextFormat::BlockAlignment);
-    format.clearProperty(QTextFormat::BlockLeftMargin);
-    format.clearProperty(QTextFormat::BlockRightMargin);
-    format.setAlignment(Qt::AlignLeft);
+//    format.clearProperty(QTextFormat::BlockAlignment);
+//    format.clearProperty(QTextFormat::BlockLeftMargin);
+//    format.clearProperty(QTextFormat::BlockRightMargin);
+//    format.setAlignment(Qt::AlignLeft);
     format.setProperty (QTextFormat::UserProperty,"H5");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -338,9 +342,9 @@ void Stack::setBlockAsBlockquote()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.setRightMargin(50.0);
-    format.setLeftMargin(50.0);
-    format.clearProperty(QTextFormat::BlockAlignment);
+//    format.setRightMargin(50.0);
+//    format.setLeftMargin(50.0);
+//    format.clearProperty(QTextFormat::BlockAlignment);
     format.setProperty (QTextFormat::UserProperty,"BLOCKQUOTE");
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -351,9 +355,9 @@ void Stack::setBlockAsAttribution()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.setRightMargin(50.0);
-    format.setLeftMargin(50.0);
-    format.setAlignment(Qt::AlignRight|Qt::AlignTop);
+//    format.setRightMargin(50.0);
+//    format.setLeftMargin(50.0);
+//    format.setAlignment(Qt::AlignRight|Qt::AlignTop);
     format.setProperty (QTextFormat::UserProperty,"ATTRIBUTION");
 
     cursor.setBlockFormat(format);
@@ -366,9 +370,9 @@ void Stack::setBlockAsPreformatted()
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
     format.setProperty (QTextFormat::UserProperty,"PRE");
-    format.clearProperty(QTextFormat::BlockAlignment);
-    format.clearProperty(QTextFormat::BlockLeftMargin);
-    format.clearProperty(QTextFormat::BlockRightMargin);
+//    format.clearProperty(QTextFormat::BlockAlignment);
+//    format.clearProperty(QTextFormat::BlockLeftMargin);
+//    format.clearProperty(QTextFormat::BlockRightMargin);
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
 }
@@ -379,9 +383,9 @@ void Stack::setBlockAsNormal()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
     QTextBlockFormat format = cursor.blockFormat();
-    format.clearProperty(QTextFormat::BlockAlignment);
-    format.clearProperty(QTextFormat::BlockLeftMargin);
-    format.clearProperty(QTextFormat::BlockRightMargin);
+//    format.clearProperty(QTextFormat::BlockAlignment);
+//    format.clearProperty(QTextFormat::BlockLeftMargin);
+//    format.clearProperty(QTextFormat::BlockRightMargin);
     format.clearProperty (QTextFormat::UserProperty);
     cursor.setBlockFormat(format);
     emit updateFormatHeadingActions();
@@ -563,8 +567,28 @@ void Stack::setFontInserted(bool underline)
 
 void Stack::setFontHighlighted(bool highlight)
 {
-        //m_current_document->text()->setFontUnderline(underline);
+    if(!highlight)
+    {
+        QTextCharFormat newformat;
+        newformat.setBackground(Qt::NoBrush);
+        newformat.clearProperty(QTextFormat::UserProperty);
+        m_current_document->text()->mergeCurrentCharFormat(newformat);
+        return;
+    }
+//    QDialog *mydialog=new QDialog();
+//    QHBoxLayout *hlay=new QHBoxLayout();
+//    ColorButton *colorbutton=new ColorButton(0);
+//    QLineEdit *mylineedit=new QLineEdit();
+//    connect(mylineedit,SIGNAL(returnPressed()),mydialog,SLOT(hide()));
+//    hlay->addWidget(colorbutton);
+//    hlay->addWidget(mylineedit);
+//    mydialog->setLayout(hlay);
+//    mydialog->show();
+//    std::cout<<mylineedit->text().toStdString()<<","<<colorbutton->color().name().toStdString();
+
 }
+
+
 
 //-----------------------------------------------------------------------------
 

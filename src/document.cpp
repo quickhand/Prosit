@@ -89,10 +89,10 @@ Document::Document(const QString& filename, int& current_wordcount, int& current
 	m_text->setMouseTracking(true);
 	m_text->setTabStopWidth(50);
 	m_text->document()->setIndentWidth(50);
-        QTextBlockFormat initblockfmt=m_text->document()->firstBlock().blockFormat();
-        initblockfmt.setBottomMargin(10);
-        QTextCursor startcursor=QTextCursor(m_text->document()->firstBlock());
-        startcursor.setBlockFormat(initblockfmt);
+        //QTextBlockFormat initblockfmt=m_text->document()->firstBlock().blockFormat();
+        //initblockfmt.setBottomMargin(10);
+        //QTextCursor startcursor=QTextCursor(m_text->document()->firstBlock());
+        //startcursor.setBlockFormat(initblockfmt);
 	m_text->setFrameStyle(QFrame::NoFrame);
 	m_text->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_text->viewport()->setMouseTracking(true);
@@ -799,7 +799,7 @@ void Document::findIndex()
 QString Document::fileFilter(const QString& filename) const
 {
 	QString plaintext = tr("Plain Text (*.txt);;All Files (*)");
-        QString richtext = tr("Rich Text (*.pup *.proseup)");
+        QString richtext = tr("Proseup Text (*.proseup)");
 	QString all = tr("All Files (*)");
 	if (!filename.isEmpty()) {
 		if (isRichTextFile(filename)) {

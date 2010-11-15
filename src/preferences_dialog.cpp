@@ -570,7 +570,7 @@ QWidget* PreferencesDialog::initGeneralTab()
 
 	m_always_center = new QCheckBox(tr("Always vertically center"), edit_group);
 	m_block_cursor = new QCheckBox(tr("Block insertion cursor"), edit_group);
-	m_rich_text = new QCheckBox(tr("Default to rich text"), edit_group);
+        m_rich_text = new QCheckBox(tr("Default to proseup text"), edit_group);
 	m_smooth_fonts = new QCheckBox(tr("Smooth fonts"), edit_group);
 	m_typewriter_sounds = new QCheckBox(tr("Typewriter sounds"), edit_group);
 
