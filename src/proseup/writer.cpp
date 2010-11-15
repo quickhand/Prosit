@@ -65,7 +65,7 @@ bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
                 }
                 if(uprop.startsWith("H") && uprop.at(1).isDigit())
                 {
-                    std::cout<<"HEADING THING! uprop="<<uprop.toStdString()<<std::endl;
+                    //std::cout<<"HEADING THING! uprop="<<uprop.toStdString()<<std::endl;
                     int headerlevel=uprop.at(1).digitValue();
                     for(int i=0;i<headerlevel;i++)
                         startblock+="#";
