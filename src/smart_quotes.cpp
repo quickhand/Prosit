@@ -151,10 +151,10 @@ QString SmartQuotes::revert(const QString& string)
 QStringList SmartQuotes::revert(const QStringList& strings)
 {
 	QStringList result = strings;
-	result.replaceInStrings(QString(m_quotes[0]), "\"");
-	result.replaceInStrings(QString(m_quotes[1]), "\"");
-	result.replaceInStrings(QString(m_quotes[2]), "'");
-	result.replaceInStrings(QString(m_quotes[3]), "'");
+        result.replaceInStrings(QString(m_quotes[0]).toUtf8(), "\"");
+        result.replaceInStrings(QString(m_quotes[1]).toUtf8(), "\"");
+        result.replaceInStrings(QString(m_quotes[2]).toUtf8(), "'");
+        result.replaceInStrings(QString(m_quotes[3]).toUtf8(), "'");
 	return result;
 }
 

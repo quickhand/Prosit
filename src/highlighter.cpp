@@ -28,6 +28,8 @@
 #include <QMenu>
 #include <QTextEdit>
 #include <iostream>
+#include <QAbstractTextDocumentLayout>
+#include <QTextLayout>
 //-----------------------------------------------------------------------------
 
 Highlighter::Highlighter(QTextEdit* text)
@@ -202,18 +204,23 @@ void Highlighter::highlightBlock(const QString& text)
                         blockformat.clearProperty(QTextFormat::BlockRightMargin);
                         blockformat.setAlignment(Qt::AlignLeft);
                 }
+//                QTextCursor blockcurse=QTextCursor(currentBlock());
+//                blockcurse.setBlockFormat(blockformat);
+//                blockcurse.setPosition(m_text->textCursor().anchor());
+//                blockcurse.setPosition(m_text->textCursor().position(),QTextCursor::KeepAnchor);
+//                m_text->setTextCursor(blockcurse);
 
-                QTextCursor blockcurse=QTextCursor(currentBlock());
-                blockcurse.setBlockFormat(blockformat);
                 setFormat(0,text.length(),hformat);
         } else {
-                blockformat.setBottomMargin(10.0);
-                blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                blockformat.clearProperty(QTextFormat::BlockRightMargin);
-                blockformat.setAlignment(Qt::AlignLeft);
-                QTextCursor blockcurse=QTextCursor(currentBlock());
-                blockcurse.setBlockFormat(blockformat);
-
+//                blockformat.setBottomMargin(10.0);
+//                blockformat.clearProperty(QTextFormat::BlockLeftMargin);
+//                blockformat.clearProperty(QTextFormat::BlockRightMargin);
+//                blockformat.setAlignment(Qt::AlignLeft);
+//                QTextCursor blockcurse=QTextCursor(currentBlock());
+//                blockcurse.setBlockFormat(blockformat);
+//                blockcurse.setPosition(m_text->textCursor().anchor());
+//                blockcurse.setPosition(m_text->textCursor().position(),QTextCursor::KeepAnchor);
+//                m_text->setTextCursor(blockcurse);
         }
 
 	if (!m_enabled) {

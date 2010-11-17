@@ -28,6 +28,7 @@ class Theme;
 #include <QHash>
 #include <QTime>
 #include <QWidget>
+#include <QTextBlockFormat>
 class QGridLayout;
 class QScrollBar;
 class QTextEdit;
@@ -63,10 +64,10 @@ public:
 	void setScrollBarVisible(bool visible);
 
 	virtual bool eventFilter(QObject* watched, QEvent* event);
-
+        QTextBlockFormat defaultFormatForBlock(QString uprop);
 public slots:
 	void centerCursor(bool force = false);
-
+        void cleanUpDocument(bool dotidy = false);
 signals:
 	void changed();
 	void changedName();
@@ -110,6 +111,8 @@ private:
 	bool m_rich_text;
 
 	QTimer* m_hide_timer;
+
+        QHash<QString,QTextBlockFormat> m_block_default_format;
 
 	QGridLayout* m_layout;
 	QTextEdit* m_text;

@@ -76,6 +76,39 @@ Preferences::Preferences()
 	m_dictionary->setLanguage(m_language);
 	m_dictionary->setIgnoreNumbers(m_ignore_numbers);
 	m_dictionary->setIgnoreUppercase(m_ignore_uppercase);
+
+        //setup paragraph styles
+        QTextBlockFormat baseformat;
+        baseformat.setBottomMargin(10.0);
+        baseformat.setAlignment(Qt::AlignLeft);
+        m_block_default_format.insert("default",baseformat);
+        QTextBlockFormat h1format=QTextBlockFormat(baseformat),h2format=QTextBlockFormat(baseformat),h3format=QTextBlockFormat(baseformat),h4format=QTextBlockFormat(baseformat),h5format=QTextBlockFormat(baseformat);
+        h1format.setProperty(QTextFormat::UserProperty,"H1");
+        h2format.setProperty(QTextFormat::UserProperty,"H2");
+        h3format.setProperty(QTextFormat::UserProperty,"H3");
+        h4format.setProperty(QTextFormat::UserProperty,"H4");
+        h5format.setProperty(QTextFormat::UserProperty,"H5");
+        m_block_default_format.insert("H1",h1format);
+        m_block_default_format.insert("H2",h2format);
+        m_block_default_format.insert("H3",h3format);
+        m_block_default_format.insert("H4",h4format);
+        m_block_default_format.insert("H5",h5format);
+        QTextBlockFormat bqformat=QTextBlockFormat(baseformat);
+        bqformat.setProperty(QTextFormat::UserProperty,"BLOCKQUOTE");
+        bqformat.setLeftMargin(50.0);
+        bqformat.setRightMargin(50.0);
+        m_block_default_format.insert("BLOCKQUOTE",bqformat);
+        QTextBlockFormat attformat=QTextBlockFormat(baseformat);
+        attformat.setAlignment(Qt::AlignRight);
+        attformat.setProperty(QTextFormat::UserProperty,"ATTRIBUTION");
+        attformat.setBottomMargin(15.0);
+        attformat.setLeftMargin(50.0);
+        attformat.setRightMargin(50.0);
+        attformat.setNonBreakableLines(true);
+        m_block_default_format.insert("ATTRIBUTION",attformat);
+        QTextBlockFormat preformat=QTextBlockFormat();
+        preformat.setProperty(QTextFormat::UserProperty,"PRE");
+        m_block_default_format.insert("PRE",preformat);
 }
 
 //-----------------------------------------------------------------------------
@@ -519,3 +552,16 @@ void Preferences::setLanguage(const QString& language)
 }
 
 //-----------------------------------------------------------------------------
+
+QTextBlockFormat Preferences::defaultFormatForBlock(QString uprop) const
+{
+    if(!m_block_default_format.keys().contains(uprop))
+        return m_block_default_format.find("default").value();
+
+    return m_block_default_format.find(uprop).value();
+}
+QStringList Preferences::definedDefaultFormatsForBlocks() const
+{
+    QStringList retlist=QStringList(m_block_default_format.keys());
+    return retlist;
+}

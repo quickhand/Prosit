@@ -52,7 +52,7 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QUrl>
-
+#include <QTextBlock>
 //-----------------------------------------------------------------------------
 
 namespace
@@ -676,6 +676,10 @@ void Window::updateFormatActions()
 	m_actions["FormatItalic"]->setChecked(format.fontItalic());
         m_actions["FormatDeleted"]->setChecked(format.fontStrikeOut());
         m_actions["FormatInserted"]->setChecked(format.fontUnderline());
+        if(format.background()==Qt::NoBrush)
+            m_actions["FormatHighlighted"]->setChecked(false);
+        else
+            m_actions["FormatHighlighted"]->setChecked(true);
         //m_actions["FormatSuperScript"]->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
         //m_actions["FormatSubScript"]->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 }
@@ -750,6 +754,16 @@ void Window::updateFormatHeadingActions()
         m_actions["FormatSetHeading5"]->setChecked(headinglevel==5);
         m_actions["FormatSetBlockquote"]->setChecked(isBlockquote);
         m_actions["FormatSetAttribution"]->setChecked(isAttribution);
+        QTextCursor cursor1=QTextCursor(document->text()->document());
+        cursor1.setPosition(document->text()->textCursor().anchor());
+
+
+        if(document->text()->textCursor().blockNumber()!=cursor1.blockNumber()
+            || document->text()->textCursor().block()==document->text()->document()->begin()
+            || document->text()->textCursor().block().previous().blockFormat().stringProperty(QTextFormat::UserProperty)!="BLOCKQUOTE")
+            m_actions["FormatSetAttribution"]->setEnabled(false);
+        else
+            m_actions["FormatSetAttribution"]->setEnabled(true);
         m_actions["FormatSetPreformatted"]->setChecked(isPreformatted);
         m_actions["FormatSetNormalParagraph"]->setChecked(isNormal);
 }
@@ -847,7 +861,7 @@ bool Window::saveDocument(int index)
 	if (!document->text()->document()->isModified()) {
 		return true;
 	}
-
+        //document->cleanUpDocument(true);
 	// Auto-save document
 	if (m_auto_save && document->text()->document()->isModified() && !document->filename().isEmpty()) {
 		return document->save();

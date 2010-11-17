@@ -57,7 +57,11 @@ bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
                 if(block.length()==0&&uprop!="PRE"&&!uprop.startsWith("DIVIDER"))
                     continue;
                 if(block!=text->document()->begin() && uprop!="ATTRIBUTION")
+                {
                     startblock="\n";
+                    if(uprop!="PRE")
+                        startblock+="\n";
+                }
                 if(uprop!="PRE" && last_was_pre)
                 {
                     startblock+="----\n";
@@ -153,6 +157,7 @@ bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
                                         innertext+=QString("%")+hlbrush.color().name()+QString("%");
                                     if(hlcomment.length()>0)
                                         innertext+=QString("%")+hlcomment+QString("%");
+
                                     innertext += "%";
                                     hlcomment=char_format.stringProperty(QTextFormat::UserProperty);
                                     hlbrush=char_format.background();

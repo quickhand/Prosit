@@ -26,6 +26,8 @@ class FindDialog;
 class Theme;
 
 #include <QWidget>
+#include <QHash>
+#include "preferences.h"
 class QGridLayout;
 class QStackedWidget;
 
@@ -50,7 +52,6 @@ public:
 	void setCurrentDocument(int index);
 	void setMargins(int footer, int header);
 	void waitForThemeBackground();
-
 signals:
 	void copyAvailable(bool);
 	void redoAvailable(bool);
@@ -110,7 +111,6 @@ public slots:
 	void updateSmartQuotesSelection();
 	void setFooterVisible(bool visible);
 	void setHeaderVisible(bool visible);
-
 protected:
 	virtual void mouseMoveEvent(QMouseEvent* event);
 	virtual void paintEvent(QPaintEvent* event);
@@ -119,6 +119,7 @@ protected:
 private slots:
 	void updateBackground();
 	void updateMask();
+        void doHighlight(QColor color,QString comment);
 
 private:
 	AlertLayer* m_alerts;

@@ -104,22 +104,25 @@ void PROSEUP::Reader::read(const QString& filename, QTextEdit* text)
                             QBrush backb=QBrush(curformat.background());
                             backb.setStyle(Qt::SolidPattern);
                             QColor mycolor;
+                            QString hlcomment;
                             if(cur.data.length()>=2)
                             {
                                 mycolor.setNamedColor(cur.data[0]);
-                                curformat.setProperty(QTextFormat::UserProperty,cur.data[1]);
+                                hlcomment=cur.data[1];
                             }
+                            else if(cur.data.length()==1)
+                                mycolor.setNamedColor(cur.data[0]);
                             else
-                            {
                                 mycolor.setNamedColor("lightyellow");
-                                if(cur.data.length()==1)
-                                    curformat.setProperty(QTextFormat::UserProperty,cur.data[0]);
-                            }
                             backb.setColor(mycolor);
                             curformat.setBackground(backb);
+                            curformat.setProperty(QTextFormat::UserProperty,hlcomment);
                         }
                         else
+                        {
                             curformat.clearBackground();
+                            curformat.clearProperty(QTextFormat::UserProperty);
+                        }
 
                     }
                     else if(PROSEUP::Token::isBlock(cur.ttype))

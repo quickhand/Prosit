@@ -28,6 +28,7 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <iostream>
+#include <QTextCodec>
 //-----------------------------------------------------------------------------
 
 PROSEUP::Tokenizer::Tokenizer()
@@ -45,7 +46,9 @@ QList<PROSEUP::Token> PROSEUP::Tokenizer::tokenize(QIODevice* device)
     QStringList linearr;
     while(!((curlinebytes=device->readLine()).isEmpty()))
     {
-        QString curline=QString(curlinebytes);
+        QByteArray encodedString = "...";
+        QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+        QString curline=QString(codec->toUnicode(curlinebytes));
         if(curline.length()>0 && curline.endsWith('\n'))
             curline.chop(1);
         if(curline.length()>=4 && curline.endsWith("----"))
@@ -99,7 +102,7 @@ QList<PROSEUP::Token> PROSEUP::Tokenizer::handle_inline(QString& text)
     QStringList splitlist;
     int stringind=0;
     int tagind;
-    while((tagind=text.indexOf(splitter,stringind))>0)
+    while((tagind=text.indexOf(splitter,stringind))>=0)
     {
         int taglen=splitter.cap(0).length();
         if(tagind!=stringind)

@@ -24,6 +24,8 @@
 class Dictionary;
 
 #include <QStringList>
+#include <QHash>
+#include <QTextBlockFormat>
 
 class Preferences : public SettingsFile
 {
@@ -94,6 +96,8 @@ public:
 	void setIgnoreWordsWithNumbers(bool ignore);
 	void setIgnoreUppercaseWords(bool ignore);
 	void setLanguage(const QString& language);
+        QTextBlockFormat defaultFormatForBlock(QString uprop) const;
+        QStringList definedDefaultFormatsForBlocks() const;
 
 private:
 	int m_goal_type;
@@ -132,6 +136,7 @@ private:
 	bool m_ignore_numbers;
 	QString m_language;
 	Dictionary* m_dictionary;
+        QHash<QString,QTextBlockFormat> m_block_default_format;
 };
 
 #endif
