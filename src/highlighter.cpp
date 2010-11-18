@@ -22,7 +22,7 @@
 
 #include "dictionary.h"
 #include "spell_checker.h"
-
+#include "editor.h"
 #include <QAction>
 #include <QContextMenuEvent>
 #include <QEvent>
@@ -33,7 +33,7 @@
 #include <QTextLayout>
 //-----------------------------------------------------------------------------
 
-Highlighter::Highlighter(QTextEdit* text)
+Highlighter::Highlighter(Editor* text)
 	: QSyntaxHighlighter(text->document()),
 	m_text(text),
 	m_enabled(true),

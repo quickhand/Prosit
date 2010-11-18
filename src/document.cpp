@@ -26,6 +26,7 @@
 #include "smart_quotes.h"
 #include "spell_checker.h"
 #include "theme.h"
+#include "editor.h"
 #include "proseup/reader.h"
 #include "proseup/writer.h"
 
@@ -86,7 +87,7 @@ Document::Document(const QString& filename, int& current_wordcount, int& current
 	connect(m_hide_timer, SIGNAL(timeout()), this, SLOT(hideMouse()));
 
 	// Set up text area
-	m_text = new QTextEdit(this);
+        m_text = new Editor(this);
 	m_text->installEventFilter(this);
 	m_text->setMouseTracking(true);
 	m_text->setTabStopWidth(50);
@@ -323,8 +324,8 @@ void Document::loadTheme(const Theme& theme)
 	// Update colors
 	QColor color = theme.foregroundColor();
 	color.setAlpha(theme.foregroundOpacity() * 2.55f);
-	m_text->setStyleSheet(
-		QString("QTextEdit { background: rgba(%1, %2, %3, %4); color: %5; selection-background-color: %6; selection-color: %7; padding: %8px; }")
+        m_text->setStyleSheet(
+                QString("Editor { background: rgba(%1, %2, %3, %4); color: %5; selection-background-color: %6; selection-color: %7; padding: %8px; }")
 			.arg(color.red())
 			.arg(color.green())
 			.arg(color.blue())

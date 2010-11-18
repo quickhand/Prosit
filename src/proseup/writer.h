@@ -24,7 +24,7 @@
 #include <QString>
 
 class QTextEdit;
-
+class Editor;
 namespace PROSEUP
 {
 	class Writer
@@ -32,7 +32,7 @@ namespace PROSEUP
 	public:
 		Writer();
 
-                bool write(const QString& filename, QTextEdit* text);
+                bool write(const QString& filename, Editor* text);
 
         };
 }

@@ -64,7 +64,8 @@ HEADERS += src/alert.h \
     src/proseup/writer.h \
     src/proseup/tokenizer.h \
     src/proseup/reader.h \
-    src/highlight_dialog.h
+    src/highlight_dialog.h \
+    src/editor.h
 
 SOURCES += src/alert.cpp \
 	src/alert_layer.cpp \
@@ -96,7 +97,8 @@ SOURCES += src/alert.cpp \
     src/proseup/writer.cpp \
     src/proseup/tokenizer.cpp \
     src/proseup/reader.cpp \
-    src/highlight_dialog.cpp
+    src/highlight_dialog.cpp \
+    src/editor.cpp
 
 TRANSLATIONS = translations/prosit_en.ts \
 	translations/prosit_es.ts \

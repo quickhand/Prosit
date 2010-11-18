@@ -125,7 +125,6 @@ protected:
 private slots:
 	void updateBackground();
 	void updateMask();
-        void doHighlight(QColor color,QString comment);
 
 private:
 	AlertLayer* m_alerts;

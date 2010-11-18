@@ -24,11 +24,12 @@
 #include <QLineEdit>
 #include <QDialogButtonBox>
 #include <QLabel>
+#include <QTextCharFormat>
 
 //-----------------------------------------------------------------------------
 
-HighlightDialog::HighlightDialog(QWidget *parent=0)
-    : QDialog(parent)
+HighlightDialog::HighlightDialog(QTextCharFormat& format,QWidget *parent=0)
+    : QDialog(parent),m_format(format)
 {
         setModal(true);
 	// Create widgets
@@ -84,7 +85,7 @@ HighlightDialog::HighlightDialog(QWidget *parent=0)
 
 
         horizontalLayout_2->addWidget(m_highlight_comment);
-        connect(m_highlight_comment, SIGNAL(returnPressed()), this, SLOT(closeDialog()));
+        connect(m_highlight_comment, SIGNAL(returnPressed()), this, SLOT(accept()));
 
         verticalLayout->addLayout(horizontalLayout_2);
 
@@ -97,7 +98,7 @@ HighlightDialog::HighlightDialog(QWidget *parent=0)
 
 
 
-        QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(closeDialog()));
+        QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 
@@ -105,9 +106,19 @@ HighlightDialog::HighlightDialog(QWidget *parent=0)
 
 //-----------------------------------------------------------------------------
 
-void HighlightDialog::closeDialog()
+void HighlightDialog::accept()
 {
-    emit highlight(m_color_button->color(),m_highlight_comment->text());
+    QColor mycolor;
+    m_format.setProperty(QTextFormat::TextToolTip,m_highlight_comment->text());
+    QBrush mybrush;
 
-    emit accept();
+    if(!m_color_button->color().isValid())
+        mycolor.setNamedColor("lightyellow");
+    else
+        mycolor=QColor(m_color_button->color());
+    mybrush.setStyle(Qt::SolidPattern);
+    mybrush.setColor(mycolor);
+    m_format.setBackground(mybrush);
+
+    QDialog::accept();
 }

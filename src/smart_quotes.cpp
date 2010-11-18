@@ -18,7 +18,7 @@
  ***********************************************************************/
 
 #include "smart_quotes.h"
-
+#include "editor.h"
 #include "preferences.h"
 
 #include <QKeyEvent>
@@ -59,7 +59,7 @@ const size_t SmartQuotes::m_quotes_list_count = sizeof(m_quotes_list) / sizeof(Q
 
 //-----------------------------------------------------------------------------
 
-bool SmartQuotes::insert(QTextEdit* text, QKeyEvent* key)
+bool SmartQuotes::insert(Editor* text, QKeyEvent* key)
 {
 	if (key->modifiers() & Qt::ControlModifier) {
 		return false;
@@ -94,7 +94,7 @@ bool SmartQuotes::insert(QTextEdit* text, QKeyEvent* key)
 
 //-----------------------------------------------------------------------------
 
-void SmartQuotes::replace(QTextEdit* text, int start, int end)
+void SmartQuotes::replace(Editor* text, int start, int end)
 {
 	QProgressDialog progress(text);
 	progress.setCancelButton(0);

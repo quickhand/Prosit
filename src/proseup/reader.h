@@ -28,7 +28,7 @@
 #include <QTextCharFormat>
 class QString;
 class QTextEdit;
-
+class Editor;
 namespace PROSEUP
 {
 	class Reader
@@ -39,12 +39,12 @@ namespace PROSEUP
 		Reader();
 		QString errorString() const;
 		bool hasError() const;
-		void read(const QString& filename, QTextEdit* text);
+                void read(const QString& filename, Editor* text);
 
 	private:
 		Tokenizer m_token;
 		QString m_error;
-		QTextEdit* m_text;
+                Editor* m_text;
 	};
 }
 

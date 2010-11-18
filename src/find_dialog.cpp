@@ -21,7 +21,7 @@
 
 #include "document.h"
 #include "stack.h"
-
+#include "editor.h"
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QGridLayout>
@@ -163,7 +163,7 @@ void FindDialog::replace()
 		return;
 	}
 
-	QTextEdit* document = m_documents->currentDocument()->text();
+        Editor* document = m_documents->currentDocument()->text();
 	QTextCursor cursor = document->textCursor();
 	Qt::CaseSensitivity cs = m_ignore_case->isChecked() ? Qt::CaseInsensitive : Qt::CaseSensitive;
 	if (QString::compare(cursor.selectedText(), text, cs) == 0) {
@@ -192,7 +192,7 @@ void FindDialog::replaceAll()
 
 	// Count instances
 	int found = 0;
-	QTextEdit* document = m_documents->currentDocument()->text();
+        Editor* document = m_documents->currentDocument()->text();
 	QTextCursor cursor = document->textCursor();
 	cursor.movePosition(QTextCursor::Start);
 	forever {
@@ -246,7 +246,7 @@ void FindDialog::find(bool backwards)
 		flags |= QTextDocument::FindBackward;
 	}
 
-	QTextEdit* document = m_documents->currentDocument()->text();
+        Editor* document = m_documents->currentDocument()->text();
 	QTextCursor cursor = document->document()->find(text, document->textCursor(), flags);
 	if (cursor.isNull()) {
 		cursor = document->textCursor();

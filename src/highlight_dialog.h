@@ -25,20 +25,20 @@
 class QLabel;
 class QLineEdit;
 class ColorButton;
-
+class QTextCharFormat;
 
 class HighlightDialog : public QDialog
 {
 	Q_OBJECT
 public:
-        HighlightDialog(QWidget *parent);
-signals:
-        void highlight(QColor color,QString comment);
-private slots:
-        void closeDialog();
+        HighlightDialog(QTextCharFormat& format,QWidget *parent);
+
+public slots:
+        virtual void accept();
 private:
         ColorButton* m_color_button;
         QLineEdit* m_highlight_comment;
+        QTextCharFormat &m_format;
 };
 
 #endif

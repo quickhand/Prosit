@@ -26,7 +26,7 @@ class Preferences;
 #include <QCoreApplication>
 class QKeyEvent;
 class QTextEdit;
-
+class Editor;
 class SmartQuotes
 {
 	Q_DECLARE_TR_FUNCTIONS(SmartQuote)
@@ -35,8 +35,8 @@ public:
 	static size_t count();
 	static bool isEnabled();
 
-	static bool insert(QTextEdit* text, QKeyEvent* key);
-	static void replace(QTextEdit* text, int start, int end);
+        static bool insert(Editor* text, QKeyEvent* key);
+        static void replace(Editor* text, int start, int end);
 	static QString revert(const QString& string);
 	static QStringList revert(const QStringList& strings);
 	static QString quoteString(const QString& string, size_t index);

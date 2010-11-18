@@ -29,13 +29,14 @@ class QLineEdit;
 class QListWidget;
 class QListWidgetItem;
 class QTextEdit;
+class Editor;
 
 class SpellChecker : public QDialog
 {
 	Q_OBJECT
 
 public:
-	static void checkDocument(QTextEdit* document);
+        static void checkDocument(Editor* document);
 
 public slots:
 	virtual void reject();
@@ -49,14 +50,14 @@ private slots:
 	void changeAll();
 
 private:
-	SpellChecker(QTextEdit* document);
+        SpellChecker(Editor* document);
 	void check();
 
 private:
 	Dictionary* m_dictionary;
 
-	QTextEdit* m_document;
-	QTextEdit* m_context;
+        Editor* m_document;
+        Editor* m_context;
 	QLineEdit* m_suggestion;
 	QListWidget* m_suggestions;
 	QTextCursor m_cursor;

@@ -18,7 +18,7 @@
  ***********************************************************************/
 
 #include "reader.h"
-
+#include "../editor.h"
 #include <QFile>
 #include <QList>
 #include <QStringList>
@@ -49,7 +49,7 @@ bool PROSEUP::Reader::hasError() const
 
 //-----------------------------------------------------------------------------
 
-void PROSEUP::Reader::read(const QString& filename, QTextEdit* text)
+void PROSEUP::Reader::read(const QString& filename, Editor* text)
 {
     QStringList tokennames;
     tokennames.append("HEADING");

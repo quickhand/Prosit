@@ -26,7 +26,7 @@
 #include "smart_quotes.h"
 #include "theme.h"
 #include "highlight_dialog.h"
-
+#include "editor.h"
 #include <QGridLayout>
 #include <QMessageBox>
 #include <QMutex>
@@ -502,7 +502,7 @@ void Stack::makeRichText()
 
 void Stack::paste()
 {
-	m_current_document->text()->paste();
+        m_current_document->text()->paste();
 }
 
 //-----------------------------------------------------------------------------
@@ -581,41 +581,25 @@ void Stack::setFontInserted(bool underline)
 
 void Stack::setFontHighlighted(bool highlight)
 {
+    QTextCharFormat newformat;
     if(!highlight)
     {
-        QTextCharFormat newformat;
+
         newformat.setBackground(Qt::NoBrush);
         //newformat.clearProperty(QTextFormat::UserProperty);
         newformat.clearProperty(QTextFormat::TextToolTip);
         m_current_document->text()->mergeCurrentCharFormat(newformat);
         return;
     }
-    HighlightDialog *mydialog=new HighlightDialog(this->window());
-    connect(mydialog,SIGNAL(highlight(QColor,QString)),this,SLOT(doHighlight(QColor,QString)));
-    mydialog->show();
+
+
+    HighlightDialog dialog(newformat, this);
+    if (dialog.exec() == QDialog::Rejected) {
+            emit updateFormatActions();
+            return;
+    }
+    m_current_document->text()->mergeCurrentCharFormat(newformat);
 }
-
-void Stack::doHighlight(QColor color,QString comment)
-{
-    QTextCharFormat myformat;
-    QColor mycolor;
-
-    //myformat.setProperty(QTextFormat::UserProperty,comment);
-    myformat.setProperty(QTextFormat::TextToolTip,QString(comment));
-    QBrush mybrush;
-
-    if(!color.isValid())
-        mycolor.setNamedColor("lightyellow");
-    else
-        mycolor=QColor(color);
-    mybrush.setStyle(Qt::SolidPattern);
-    mybrush.setColor(mycolor);
-    myformat.setBackground(mybrush);
-
-
-    m_current_document->text()->mergeCurrentCharFormat(myformat);   
-}
-
 
 //-----------------------------------------------------------------------------
 

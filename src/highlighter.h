@@ -27,13 +27,14 @@ class Dictionary;
 #include <QTextCursor>
 class QAction;
 class QTextEdit;
+class Editor;
 
 class Highlighter : public QSyntaxHighlighter
 {
 	Q_OBJECT
 
 public:
-	Highlighter(QTextEdit* text);
+        Highlighter(Editor* text);
 
 	bool enabled() const;
 	QColor misspelledColor() const;
@@ -48,7 +49,7 @@ private slots:
 
 private:
 	Dictionary* m_dictionary;
-	QTextEdit* m_text;
+        Editor* m_text;
 	QTextCursor m_cursor;
 	QTextCursor m_start_cursor;
 	bool m_enabled;

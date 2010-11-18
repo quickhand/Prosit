@@ -21,7 +21,7 @@
 
 #include "dictionary.h"
 #include "document.h"
-
+#include "editor.h"
 #include <QAction>
 #include <QDialogButtonBox>
 #include <QDir>
@@ -38,7 +38,7 @@
 
 //-----------------------------------------------------------------------------
 
-void SpellChecker::checkDocument(QTextEdit* document)
+void SpellChecker::checkDocument(Editor* document)
 {
 	SpellChecker* checker = new SpellChecker(document);
 	checker->m_start_cursor = document->textCursor();
@@ -122,7 +122,7 @@ void SpellChecker::changeAll()
 
 //-----------------------------------------------------------------------------
 
-SpellChecker::SpellChecker(QTextEdit* document)
+SpellChecker::SpellChecker(Editor* document)
 	: QDialog(document->parentWidget(), Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint),
 	m_document(document)
 {
@@ -132,7 +132,7 @@ SpellChecker::SpellChecker(QTextEdit* document)
 	m_dictionary = new Dictionary(this);
 
 	// Create widgets
-	m_context = new QTextEdit(this);
+        m_context = new Editor(this);
 	m_context->setReadOnly(true);
 	m_context->setTabStopWidth(50);
 	QPushButton* add_button = new QPushButton(tr("Add"), this);

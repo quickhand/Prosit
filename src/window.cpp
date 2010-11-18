@@ -33,6 +33,7 @@
 #include "theme_manager.h"
 #include "timer_display.h"
 #include "timer_manager.h"
+#include "editor.h"
 
 #include <QAction>
 #include <QApplication>
@@ -680,7 +681,7 @@ void Window::updateFormatActions()
 	m_actions["FormatItalic"]->setChecked(format.fontItalic());
         m_actions["FormatDeleted"]->setChecked(format.fontStrikeOut());
         m_actions["FormatInserted"]->setChecked(format.fontUnderline());
-        if(format.background()==Qt::NoBrush)
+        if(format.background()==Qt::NoBrush||format.background()==this->m_documents->currentDocument()->text()->textCursor().blockFormat().background())
             m_actions["FormatHighlighted"]->setChecked(false);
         else
             m_actions["FormatHighlighted"]->setChecked(true);

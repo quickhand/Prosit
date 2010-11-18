@@ -34,6 +34,7 @@ class QGridLayout;
 class QScrollBar;
 class QTextEdit;
 class QTimer;
+class Editor;
 
 class Document : public QWidget
 {
@@ -52,7 +53,7 @@ public:
 	int pageCount() const;
 	int paragraphCount() const;
 	int wordCount() const;
-	QTextEdit* text() const;
+        Editor* text() const;
 
 	bool save();
 	bool saveAs();
@@ -115,8 +116,8 @@ private:
 
         QHash<QString,QTextBlockFormat> m_block_default_format;
 
-	QGridLayout* m_layout;
-	QTextEdit* m_text;
+        QGridLayout* m_layout;
+        Editor* m_text;
 	QScrollBar* m_scrollbar;
 	Highlighter* m_highlighter;
 
@@ -172,7 +173,7 @@ inline int Document::wordCount() const {
 	return m_stats->wordCount();
 }
 
-inline QTextEdit* Document::text() const {
+inline Editor* Document::text() const {
 	return m_text;
 }
 

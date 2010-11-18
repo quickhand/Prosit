@@ -18,7 +18,7 @@
  ***********************************************************************/
 
 #include "writer.h"
-
+#include "../editor.h"
 #include <QFile>
 #include <QTextBlock>
 #include <QTextCodec>
@@ -34,7 +34,7 @@ PROSEUP::Writer::Writer()
 
 //-----------------------------------------------------------------------------
 
-bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
+bool PROSEUP::Writer::write(const QString& filename, Editor* text)
 {
 	QFile file(filename);
 	if (!file.open(QFile::WriteOnly | QFile::Text)) {
