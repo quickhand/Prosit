@@ -1,7 +1,8 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-	<file>prosit.png</file>
-	<file>load.png</file>
-	<file>shadow.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>prosit.png</file>
+        <file>load.png</file>
+        <file>shadow.png</file>
+        <file>prosit.svg</file>
+    </qresource>
 </RCC>

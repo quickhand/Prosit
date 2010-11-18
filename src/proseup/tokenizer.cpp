@@ -1,11 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2010 Graeme Gott <graeme@gottcode.org>
- *
- * Derived from KWord's PROSEUPimport_tokenizer.cpp
- *  Copyright (C) 2001 Ewald Snel <ewald@rambo.its.tudelft.nl>
- *  Copyright (C) 2001 Tomasz Grobelny <grotk@poczta.onet.pl>
- *  Copyright (C) 2005 Tommi Rantala <tommi.rantala@cs.helsinki.fi>
+ * Copyright (C) 2010 Marc Lajoie <manorapide@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

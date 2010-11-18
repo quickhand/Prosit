@@ -123,6 +123,9 @@ unix: !macx {
 	icon.files = icons/prosit.png
 	icon.path = $$PREFIX/share/icons/hicolor/48x48/apps
 
+	scaleicon.files = icons/prosit.svg
+	scaleicon.path = $$PREFIX/share/icons/hicolor/scalable/apps
+
 	icons.files = icons/oxygen/hicolor/*
 	icons.path = $$PREFIX/share/prosit/icons/hicolor
 
@@ -135,5 +138,5 @@ unix: !macx {
 	sounds.files = sounds/*
 	sounds.path = $$PREFIX/share/prosit/sounds
 
-	INSTALLS += target icon desktop icons qm sounds
+	INSTALLS += target icon scaleicon desktop icons qm sounds
 }

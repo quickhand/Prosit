@@ -1,6 +1,7 @@
 /***********************************************************************
  *
  * Copyright (C) 2008, 2009, 2010 Graeme Gott <graeme@gottcode.org>
+ * Copyright (C) 2010 Marc Lajoie <manorapide@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

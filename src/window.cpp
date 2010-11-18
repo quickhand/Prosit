@@ -1,6 +1,7 @@
 /***********************************************************************
  *
  * Copyright (C) 2008, 2009, 2010 Graeme Gott <graeme@gottcode.org>
+ * Copyright (C) 2010 Marc Lajoie <manorapide@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -587,7 +588,10 @@ void Window::aboutClicked()
 {
 	QMessageBox::about(this, tr("About Prosit"), tr(
 		"<p><center><big><b>Prosit %1</b></big><br/>"
-		"A simple fullscreen word processor<br/>"
+                "<small>Copyright &copy; 2008-2010 Graeme Gott</small><br/>"
+                "<small>Copyright &copy; 2010 Marc Lajoie</small><br/>"
+                "A simple fullscreen word processor based on Grame Gott's<br/>"
+                "<big>Focuswriter</big><br/>"
 		"<small>Copyright &copy; 2008-2010 Graeme Gott</small><br/>"
 		"<small>Released under the <a href=\"http://www.gnu.org/licenses/gpl.html\">GPL 3</a> license</small></center></p>"
 		"<p><center>Uses <a href=\"http://hunspell.sourceforge.net/\">Hunspell</a> for spell checking<br/>"
