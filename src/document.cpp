@@ -492,14 +492,21 @@ bool Document::eventFilter(QObject* watched, QEvent* event)
                     int curblock=testcursor.blockNumber();
                     if(curblock==ancblock)
                     {
-                        if(testcursor.blockFormat().stringProperty(QTextFormat::UserProperty)=="ATTRIBUTION")
+                        QString uprop=testcursor.blockFormat().stringProperty(QTextFormat::UserProperty);
+                        if(uprop=="ATTRIBUTION" || uprop.startsWith("DIVIDER"))
                         {
                             testcursor.insertBlock(defaultFormatForBlock(""));
                             return true;
                         }
                     }
                 }
-		if (!key_event->text().isEmpty()) {
+
+
+                if (!key_event->text().isEmpty())
+                {
+                        QTextCursor testcursor2=QTextCursor(m_text->textCursor());
+                        if(testcursor2.anchor()==testcursor2.position()&&testcursor2.atBlockStart()&&testcursor2.blockFormat().stringProperty(QTextFormat::UserProperty).startsWith("DIVIDER"))
+                            return true;
                         if(SmartQuotes::isEnabled()&&key_event->text()=="-")
                         {
                                 QTextCursor testcursor=QTextCursor(m_text->document());
@@ -551,16 +558,16 @@ void Document::mouseMoveEvent(QMouseEvent* event)
 	if (rect().contains(point)) {
 		emit headerVisible(false);
 		emit footerVisible(false);
-                QTextCursor curse=m_text->cursorForPosition(point);
-                if(curse.charFormat().background()!=Qt::NoBrush&&curse.charFormat().background()!=curse.blockFormat().background()&&curse.charFormat().hasProperty(QTextFormat::UserProperty))
-                {
-                    QString prop=curse.charFormat().stringProperty(QTextFormat::UserProperty);
-                    if(m_text->toolTip()!=prop)
-                        m_text->setToolTip(prop);
+//                QTextCursor curse=m_text->cursorForPosition(point);
+//                if(curse.charFormat().background()!=Qt::NoBrush&&curse.charFormat().background()!=curse.blockFormat().background()&&curse.charFormat().hasProperty(QTextFormat::UserProperty))
+//                {
+//                    QString prop=curse.charFormat().stringProperty(QTextFormat::UserProperty);
+//                    if(m_text->toolTip()!=prop)
+//                        m_text->setToolTip(prop);
 
-                }
-                else if(m_text->toolTip().length()>0)
-                    m_text->setToolTip("");
+//                }
+//                else if(m_text->toolTip().length()>0)
+//                    m_text->setToolTip("");
 
 
 
@@ -913,7 +920,8 @@ void Document::cleanUpDocument(bool dotidy)
                     else
                         blockcurse.deletePreviousChar();
 
-                }
+                } else if(blockcurse.anchor()!=blockcurse.position()&&uprop.startsWith("DIVIDER"))
+                    blockcurse.removeSelectedText();
                 blockcurse.movePosition(QTextCursor::NextBlock);
             }
         }

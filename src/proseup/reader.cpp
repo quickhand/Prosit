@@ -116,12 +116,13 @@ void PROSEUP::Reader::read(const QString& filename, QTextEdit* text)
                                 mycolor.setNamedColor("lightyellow");
                             backb.setColor(mycolor);
                             curformat.setBackground(backb);
-                            curformat.setProperty(QTextFormat::UserProperty,hlcomment);
+                            //curformat.setProperty(QTextFormat::UserProperty,hlcomment);
+                            curformat.setProperty(QTextFormat::TextToolTip,hlcomment);
                         }
                         else
                         {
                             curformat.clearBackground();
-                            curformat.clearProperty(QTextFormat::UserProperty);
+                            curformat.clearProperty(QTextFormat::TextToolTip);
                         }
 
                     }

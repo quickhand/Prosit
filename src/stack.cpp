@@ -40,6 +40,7 @@
 #include <QTimer>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QTextBlockFormat>
 #include <iostream>
 
 //-----------------------------------------------------------------------------
@@ -279,12 +280,6 @@ void Stack::setBlockAsHeading1()
 void Stack::setBlockAsHeading2()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
-//    QTextBlockFormat format = cursor.blockFormat();
-//    format.clearProperty(QTextFormat::BlockAlignment);
-//    format.clearProperty(QTextFormat::BlockLeftMargin);
-//    format.clearProperty(QTextFormat::BlockRightMargin);
-//    format.setProperty (QTextFormat::UserProperty,"H2");
-//    cursor.setBlockFormat(format);
     cursor.setBlockFormat(m_current_document->defaultFormatForBlock("H2"));
     emit updateFormatHeadingActions();
 }
@@ -294,12 +289,6 @@ void Stack::setBlockAsHeading2()
 void Stack::setBlockAsHeading3()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
-//    QTextBlockFormat format = cursor.blockFormat();
-//    format.clearProperty(QTextFormat::BlockAlignment);
-//    format.clearProperty(QTextFormat::BlockLeftMargin);
-//    format.clearProperty(QTextFormat::BlockRightMargin);
-//    format.setProperty (QTextFormat::UserProperty,"H3");
-//    cursor.setBlockFormat(format);
     cursor.setBlockFormat(m_current_document->defaultFormatForBlock("H3"));
     emit updateFormatHeadingActions();
 }
@@ -309,12 +298,6 @@ void Stack::setBlockAsHeading3()
 void Stack::setBlockAsHeading4()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
-//    QTextBlockFormat format = cursor.blockFormat();
-//    format.clearProperty(QTextFormat::BlockAlignment);
-//    format.clearProperty(QTextFormat::BlockLeftMargin);
-//    format.clearProperty(QTextFormat::BlockRightMargin);
-//    format.setProperty (QTextFormat::UserProperty,"H4");
-//    cursor.setBlockFormat(format);
     cursor.setBlockFormat(m_current_document->defaultFormatForBlock("H4"));
     emit updateFormatHeadingActions();
 }
@@ -324,15 +307,67 @@ void Stack::setBlockAsHeading4()
 void Stack::setBlockAsHeading5()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
-//    QTextBlockFormat format = cursor.blockFormat();
-//    format.clearProperty(QTextFormat::BlockAlignment);
-//    format.clearProperty(QTextFormat::BlockLeftMargin);
-//    format.clearProperty(QTextFormat::BlockRightMargin);
-//    format.setAlignment(Qt::AlignLeft);
-//    format.setProperty (QTextFormat::UserProperty,"H5");
-//    cursor.setBlockFormat(format);
     cursor.setBlockFormat(m_current_document->defaultFormatForBlock("H5"));
     emit updateFormatHeadingActions();
+}
+
+//-----------------------------------------------------------------------------
+void Stack::setBlockAsDivider1()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    if(cursor.atBlockStart()&&cursor.atBlockEnd()&&cursor.anchor()==cursor.position())
+    {
+        cursor.setBlockFormat(m_current_document->defaultFormatForBlock("DIVIDER1"));
+        emit updateFormatHeadingActions();
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Stack::setBlockAsDivider2()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    if(cursor.atBlockStart()&&cursor.atBlockEnd()&&cursor.anchor()==cursor.position())
+    {
+        cursor.setBlockFormat(m_current_document->defaultFormatForBlock("DIVIDER2"));
+        emit updateFormatHeadingActions();
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Stack::setBlockAsDivider3()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    if(cursor.atBlockStart()&&cursor.atBlockEnd()&&cursor.anchor()==cursor.position())
+    {
+        cursor.setBlockFormat(m_current_document->defaultFormatForBlock("DIVIDER3"));
+        emit updateFormatHeadingActions();
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Stack::setBlockAsDivider4()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    if(cursor.atBlockStart()&&cursor.atBlockEnd()&&cursor.anchor()==cursor.position())
+    {
+        cursor.setBlockFormat(m_current_document->defaultFormatForBlock("DIVIDER4"));
+        emit updateFormatHeadingActions();
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Stack::setBlockAsDivider5()
+{
+    QTextCursor cursor = m_current_document->text()->textCursor();
+    if(cursor.atBlockStart()&&cursor.atBlockEnd()&&cursor.anchor()==cursor.position())
+    {
+        cursor.setBlockFormat(m_current_document->defaultFormatForBlock("DIVIDER5"));
+        emit updateFormatHeadingActions();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -340,12 +375,6 @@ void Stack::setBlockAsHeading5()
 void Stack::setBlockAsBlockquote()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
-//    QTextBlockFormat format = cursor.blockFormat();
-//    format.setRightMargin(50.0);
-//    format.setLeftMargin(50.0);
-//    format.clearProperty(QTextFormat::BlockAlignment);
-//    format.setProperty (QTextFormat::UserProperty,"BLOCKQUOTE");
-//    cursor.setBlockFormat(format);
     cursor.setBlockFormat(m_current_document->defaultFormatForBlock("BLOCKQUOTE"));
     emit updateFormatHeadingActions();
 }
@@ -354,13 +383,6 @@ void Stack::setBlockAsBlockquote()
 void Stack::setBlockAsAttribution()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
-//    QTextBlockFormat format = cursor.blockFormat();
-//    format.setRightMargin(50.0);
-//    format.setLeftMargin(50.0);
-//    format.setAlignment(Qt::AlignRight|Qt::AlignTop);
-//    format.setProperty (QTextFormat::UserProperty,"ATTRIBUTION");
-
-//    cursor.setBlockFormat(format);
     cursor.setBlockFormat(m_current_document->defaultFormatForBlock("ATTRIBUTION"));
     emit updateFormatHeadingActions();
 }
@@ -369,12 +391,6 @@ void Stack::setBlockAsAttribution()
 void Stack::setBlockAsPreformatted()
 {
     QTextCursor cursor = m_current_document->text()->textCursor();
-//    QTextBlockFormat format = cursor.blockFormat();
-//    format.setProperty (QTextFormat::UserProperty,"PRE");
-//    format.clearProperty(QTextFormat::BlockAlignment);
-//    format.clearProperty(QTextFormat::BlockLeftMargin);
-//    format.clearProperty(QTextFormat::BlockRightMargin);
-//    cursor.setBlockFormat(format);
     cursor.setBlockFormat(m_current_document->defaultFormatForBlock("PRE"));
     emit updateFormatHeadingActions();
 }
@@ -568,7 +584,8 @@ void Stack::setFontHighlighted(bool highlight)
     {
         QTextCharFormat newformat;
         newformat.setBackground(Qt::NoBrush);
-        newformat.clearProperty(QTextFormat::UserProperty);
+        //newformat.clearProperty(QTextFormat::UserProperty);
+        newformat.clearProperty(QTextFormat::TextToolTip);
         m_current_document->text()->mergeCurrentCharFormat(newformat);
         return;
     }
@@ -581,9 +598,9 @@ void Stack::doHighlight(QColor color,QString comment)
 {
     QTextCharFormat myformat;
     QColor mycolor;
-    std::cout<<"COMMENT!"<<comment.toStdString()<<std::endl;
 
-    myformat.setProperty(QTextFormat::UserProperty,comment);
+    //myformat.setProperty(QTextFormat::UserProperty,comment);
+    myformat.setProperty(QTextFormat::TextToolTip,QString(comment));
     QBrush mybrush;
 
     if(!color.isValid())
@@ -594,11 +611,8 @@ void Stack::doHighlight(QColor color,QString comment)
     mybrush.setColor(mycolor);
     myformat.setBackground(mybrush);
 
-    std::cout<<"COMMENT2!"<<myformat.stringProperty(QTextFormat::UserProperty).toStdString()<<std::endl;
-    m_current_document->text()->mergeCurrentCharFormat(myformat);
-    std::cout<<"COMMENT3!"<<m_current_document->text()->currentCharFormat().stringProperty(QTextFormat::UserProperty).toStdString()<<std::endl;
-    //m_current_document->text()->setLayout(m_current_document->text()->layout());
 
+    m_current_document->text()->mergeCurrentCharFormat(myformat);   
 }
 
 

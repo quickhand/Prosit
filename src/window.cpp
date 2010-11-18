@@ -728,15 +728,19 @@ void Window::updateFormatHeadingActions()
         bool isAttribution=false;
         bool isPreformatted=false;
         int headinglevel=0;
+        int dividerlevel=0;
         if(!block_format.hasProperty(QTextFormat::UserProperty)) {
                 headinglevel=0;
+                dividerlevel=0;
                 isNormal=true;
         }
         else {
 
                 QString up=block_format.stringProperty(QTextFormat::UserProperty);
-                if(up.length()>0 && up.startsWith("H") && up[1].isDigit())
+                if(up.length()>1 && up.startsWith("H") && up[1].isDigit())
                         headinglevel=up[1].digitValue();
+                else if(up.length()>7 && up.startsWith("DIVIDER")&&up[7].isDigit())
+                        dividerlevel=up[7].digitValue();
                 else if(up=="BLOCKQUOTE")
                     isBlockquote=true;
                 else if(up=="ATTRIBUTION")
@@ -752,6 +756,11 @@ void Window::updateFormatHeadingActions()
         m_actions["FormatSetHeading3"]->setChecked(headinglevel==3);
         m_actions["FormatSetHeading4"]->setChecked(headinglevel==4);
         m_actions["FormatSetHeading5"]->setChecked(headinglevel==5);
+        m_actions["FormatSetDivider1"]->setChecked(dividerlevel==1);
+        m_actions["FormatSetDivider2"]->setChecked(dividerlevel==2);
+        m_actions["FormatSetDivider3"]->setChecked(dividerlevel==3);
+        m_actions["FormatSetDivider4"]->setChecked(dividerlevel==4);
+        m_actions["FormatSetDivider5"]->setChecked(dividerlevel==5);
         m_actions["FormatSetBlockquote"]->setChecked(isBlockquote);
         m_actions["FormatSetAttribution"]->setChecked(isAttribution);
         QTextCursor cursor1=QTextCursor(document->text()->document());
@@ -1083,15 +1092,16 @@ void Window::initMenus()
         //m_actions["FormatAlignRight"]->setCheckable(true);
         //m_actions["FormatAlignJustify"] = format_menu->addAction(QIcon::fromTheme("format-justify-fill"), tr("Align &Justify"), m_documents, SLOT(alignJustify()), tr("Ctrl+J"));
         //m_actions["FormatAlignJustify"]->setCheckable(true);
-        m_actions["FormatSetHeading1"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 1"),m_documents,SLOT(setBlockAsHeading1()));
+        QMenu* H_menu=format_menu->addMenu("Headings");
+        m_actions["FormatSetHeading1"] = H_menu->addAction(QIcon::fromTheme(""),tr("Heading 1"),m_documents,SLOT(setBlockAsHeading1()));
         m_actions["FormatSetHeading1"]->setCheckable(true);
-        m_actions["FormatSetHeading2"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 2"),m_documents,SLOT(setBlockAsHeading2()));
+        m_actions["FormatSetHeading2"] = H_menu->addAction(QIcon::fromTheme(""),tr("Heading 2"),m_documents,SLOT(setBlockAsHeading2()));
         m_actions["FormatSetHeading2"]->setCheckable(true);
-        m_actions["FormatSetHeading3"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 3"),m_documents,SLOT(setBlockAsHeading3()));
+        m_actions["FormatSetHeading3"] = H_menu->addAction(QIcon::fromTheme(""),tr("Heading 3"),m_documents,SLOT(setBlockAsHeading3()));
         m_actions["FormatSetHeading3"]->setCheckable(true);
-        m_actions["FormatSetHeading4"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 4"),m_documents,SLOT(setBlockAsHeading4()));
+        m_actions["FormatSetHeading4"] = H_menu->addAction(QIcon::fromTheme(""),tr("Heading 4"),m_documents,SLOT(setBlockAsHeading4()));
         m_actions["FormatSetHeading4"]->setCheckable(true);
-        m_actions["FormatSetHeading5"] = format_menu->addAction(QIcon::fromTheme(""),tr("Heading 5"),m_documents,SLOT(setBlockAsHeading5()));
+        m_actions["FormatSetHeading5"] = H_menu->addAction(QIcon::fromTheme(""),tr("Heading 5"),m_documents,SLOT(setBlockAsHeading5()));
         m_actions["FormatSetHeading5"]->setCheckable(true);
         m_actions["FormatSetBlockquote"] = format_menu->addAction(QIcon::fromTheme(""),tr("Blockquote"),m_documents,SLOT(setBlockAsBlockquote()));
         m_actions["FormatSetBlockquote"]->setCheckable(true);
@@ -1099,6 +1109,17 @@ void Window::initMenus()
         m_actions["FormatSetAttribution"]->setCheckable(true);
         m_actions["FormatSetPreformatted"] = format_menu->addAction(QIcon::fromTheme(""),tr("Preformatted Text"),m_documents,SLOT(setBlockAsPreformatted()));
         m_actions["FormatSetPreformatted"]->setCheckable(true);
+        QMenu* divider_menu=format_menu->addMenu("Dividers");
+        m_actions["FormatSetDivider1"] = divider_menu->addAction(QIcon::fromTheme(""),tr("Divider 1"),m_documents,SLOT(setBlockAsDivider1()));
+        m_actions["FormatSetDivider1"]->setCheckable(true);
+        m_actions["FormatSetDivider2"] = divider_menu->addAction(QIcon::fromTheme(""),tr("Divider 2"),m_documents,SLOT(setBlockAsDivider2()));
+        m_actions["FormatSetDivider2"]->setCheckable(true);
+        m_actions["FormatSetDivider3"] = divider_menu->addAction(QIcon::fromTheme(""),tr("Divider 3"),m_documents,SLOT(setBlockAsDivider3()));
+        m_actions["FormatSetDivider3"]->setCheckable(true);
+        m_actions["FormatSetDivider4"] = divider_menu->addAction(QIcon::fromTheme(""),tr("Divider 4"),m_documents,SLOT(setBlockAsDivider4()));
+        m_actions["FormatSetDivider4"]->setCheckable(true);
+        m_actions["FormatSetDivider5"] = divider_menu->addAction(QIcon::fromTheme(""),tr("Divider 5"),m_documents,SLOT(setBlockAsDivider5()));
+        m_actions["FormatSetDivider5"]->setCheckable(true);
         m_actions["FormatSetNormalParagraph"] = format_menu->addAction(QIcon::fromTheme(""),tr("Normal Paragraph"),m_documents,SLOT(setBlockAsNormal()));
         m_actions["FormatSetNormalParagraph"]->setCheckable(true);
         //QActionGroup* alignment = new QActionGroup(this);

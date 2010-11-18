@@ -109,6 +109,32 @@ Preferences::Preferences()
         QTextBlockFormat preformat=QTextBlockFormat();
         preformat.setProperty(QTextFormat::UserProperty,"PRE");
         m_block_default_format.insert("PRE",preformat);
+        QTextBlockFormat d1format=QTextBlockFormat();
+        d1format.setProperty(QTextFormat::UserProperty,"DIVIDER1");
+        m_block_default_format.insert("DIVIDER1",d1format);
+        QTextBlockFormat d2format=QTextBlockFormat();
+        d2format.setProperty(QTextFormat::UserProperty,"DIVIDER2");
+        d2format.setTopMargin(5);
+        d2format.setBottomMargin(5);
+        m_block_default_format.insert("DIVIDER2",d2format);
+        QTextBlockFormat d3format=QTextBlockFormat();
+        d3format.setProperty(QTextFormat::UserProperty,"DIVIDER3");
+        d3format.setTopMargin(5);
+        d3format.setBottomMargin(10);
+        d3format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,20));
+        m_block_default_format.insert("DIVIDER3",d3format);
+        QTextBlockFormat d4format=QTextBlockFormat();
+        d4format.setProperty(QTextFormat::UserProperty,"DIVIDER4");
+        d4format.setTopMargin(10);
+        d4format.setBottomMargin(15);
+        d4format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,50));
+        m_block_default_format.insert("DIVIDER4",d4format);
+        QTextBlockFormat d5format=QTextBlockFormat();
+        d5format.setProperty(QTextFormat::UserProperty,"DIVIDER5");
+        d5format.setTopMargin(15);
+        d5format.setBottomMargin(25);
+        d5format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,100));
+        m_block_default_format.insert("DIVIDER5",d5format);
 }
 
 //-----------------------------------------------------------------------------

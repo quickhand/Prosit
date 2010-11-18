@@ -74,6 +74,11 @@ public slots:
         void setBlockAsHeading3();
         void setBlockAsHeading4();
         void setBlockAsHeading5();
+        void setBlockAsDivider1();
+        void setBlockAsDivider2();
+        void setBlockAsDivider3();
+        void setBlockAsDivider4();
+        void setBlockAsDivider5();
         void setBlockAsBlockquote();
         void setBlockAsAttribution();
         void setBlockAsPreformatted();

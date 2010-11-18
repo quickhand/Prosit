@@ -108,7 +108,8 @@ bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
 
                                 QString innertext="";
                                 if(hl_on) {
-                                    if(char_format.background()==Qt::NoBrush || char_format.background()==block.blockFormat().background() || char_format.background()!=hlbrush || char_format.stringProperty(QTextFormat::UserProperty)!=hlcomment)
+                                    //if(char_format.background()==Qt::NoBrush || char_format.background()==block.blockFormat().background() || char_format.background()!=hlbrush || char_format.stringProperty(QTextFormat::UserProperty)!=hlcomment)
+                                    if(char_format.background()==Qt::NoBrush || char_format.background()==block.blockFormat().background() || char_format.background()!=hlbrush || char_format.stringProperty(QTextFormat::TextToolTip)!=hlcomment)
                                     {
                                         innertext += "%}";
                                         hl_on=false;
@@ -150,7 +151,7 @@ bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
                                 }
 
                                 if(char_format.background()!=Qt::NoBrush && char_format.background()!=block.blockFormat().background() && !hl_on) {
-                                    hlcomment=char_format.stringProperty(QTextFormat::UserProperty);
+                                    hlcomment=char_format.stringProperty(QTextFormat::TextToolTip);
                                     hlbrush=char_format.background();
                                     innertext += "{";
                                     if(hlbrush.color().name()!="lightyellow")
@@ -159,7 +160,7 @@ bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
                                         innertext+=QString("%")+hlcomment+QString("%");
 
                                     innertext += "%";
-                                    hlcomment=char_format.stringProperty(QTextFormat::UserProperty);
+                                    hlcomment=char_format.stringProperty(QTextFormat::TextToolTip);
                                     hlbrush=char_format.background();
                                     hl_on=true;
                                 }
@@ -179,7 +180,7 @@ bool PROSEUP::Writer::write(const QString& filename, QTextEdit* text)
                 {
                     if(!(block.next().isValid()
                         && block.next().begin().fragment().charFormat().background()==hlbrush
-                        && block.next().begin().fragment().charFormat().stringProperty(QTextFormat::UserProperty)==hlcomment))
+                        && block.next().begin().fragment().charFormat().stringProperty(QTextFormat::TextToolTip)==hlcomment))
                     {
                         endblock += "%}";
                         hl_on=false;
