@@ -58,7 +58,7 @@ namespace
 
 	bool isRichTextFile(const QString& filename)
 	{
-                return filename.endsWith(QLatin1String(".proseup"))||filename.endsWith(QLatin1String(".pup"));
+                return filename.endsWith(QLatin1String(".proseup"));
 	}
 }
 

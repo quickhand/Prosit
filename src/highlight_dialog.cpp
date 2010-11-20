@@ -51,7 +51,7 @@ HighlightDialog::HighlightDialog(QTextCharFormat& format,QWidget *parent=0)
         QLabel *label_2;
         QDialogButtonBox *buttonBox;
 
-        setWindowTitle("Highlight Settings");
+        setWindowTitle(tr("Highlight Settings"));
         resize(350, 115);
 
         verticalLayout = new QVBoxLayout(this);
@@ -62,7 +62,7 @@ HighlightDialog::HighlightDialog(QTextCharFormat& format,QWidget *parent=0)
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        label = new QLabel("Highlight Color:",this);
+        label = new QLabel(tr("Highlight Color:"),this);
 
 
         horizontalLayout->addWidget(label);
@@ -76,7 +76,7 @@ HighlightDialog::HighlightDialog(QTextCharFormat& format,QWidget *parent=0)
 
         horizontalLayout_2 = new QHBoxLayout();
 
-        label_2 = new QLabel("Highlight Label:",this);
+        label_2 = new QLabel(tr("Highlight Label:"),this);
 
 
         horizontalLayout_2->addWidget(label_2);

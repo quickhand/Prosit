@@ -1097,7 +1097,7 @@ void Window::initMenus()
         //m_actions["FormatAlignRight"]->setCheckable(true);
         //m_actions["FormatAlignJustify"] = format_menu->addAction(QIcon::fromTheme("format-justify-fill"), tr("Align &Justify"), m_documents, SLOT(alignJustify()), tr("Ctrl+J"));
         //m_actions["FormatAlignJustify"]->setCheckable(true);
-        QMenu* H_menu=format_menu->addMenu("Headings");
+        QMenu* H_menu=format_menu->addMenu(tr("Headings"));
         m_actions["FormatSetHeading1"] = H_menu->addAction(QIcon::fromTheme(""),tr("Heading 1"),m_documents,SLOT(setBlockAsHeading1()));
         m_actions["FormatSetHeading1"]->setCheckable(true);
         m_actions["FormatSetHeading2"] = H_menu->addAction(QIcon::fromTheme(""),tr("Heading 2"),m_documents,SLOT(setBlockAsHeading2()));
@@ -1114,7 +1114,7 @@ void Window::initMenus()
         m_actions["FormatSetAttribution"]->setCheckable(true);
         m_actions["FormatSetPreformatted"] = format_menu->addAction(QIcon::fromTheme(""),tr("Preformatted Text"),m_documents,SLOT(setBlockAsPreformatted()));
         m_actions["FormatSetPreformatted"]->setCheckable(true);
-        QMenu* divider_menu=format_menu->addMenu("Dividers");
+        QMenu* divider_menu=format_menu->addMenu(tr("Dividers"));
         m_actions["FormatSetDivider1"] = divider_menu->addAction(QIcon::fromTheme(""),tr("Divider 1"),m_documents,SLOT(setBlockAsDivider1()));
         m_actions["FormatSetDivider1"]->setCheckable(true);
         m_actions["FormatSetDivider2"] = divider_menu->addAction(QIcon::fromTheme(""),tr("Divider 2"),m_documents,SLOT(setBlockAsDivider2()));
