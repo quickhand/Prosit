@@ -1327,57 +1327,57 @@
     <message>
         <location filename="../src/window.cpp" line="1076"/>
         <source>&amp;Emphasized</source>
-        <translation>&amp;Accentué</translation>
+        <translation>Texte Mise en &amp;Exergue</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1078"/>
         <source>&amp;Strongly Emphasized</source>
-        <translation>&amp;Fortement Accentué</translation>
+        <translation>Texte &amp;Fortement Mise en Exergue</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1080"/>
         <source>&amp;Inserted</source>
-        <translation>&amp;Inséré</translation>
+        <translation>Texte &amp;Inséré</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1082"/>
         <source>&amp;Deleted</source>
-        <translation>&amp;Supprimé</translation>
+        <translation>Texte &amp;Supprimé</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1084"/>
         <source>&amp;Highlighted</source>
-        <translation>&amp;Marqué</translation>
+        <translation>Texte &amp;Marqué</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1100"/>
         <source>Headings</source>
-        <translation>En-Têtes</translation>
+        <translation>Titres</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1101"/>
         <source>Heading 1</source>
-        <translation>En-Tête Niveau 1</translation>
+        <translation>Titre Niveau 1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1103"/>
         <source>Heading 2</source>
-        <translation>En-Tête Niveau 2</translation>
+        <translation>Titre Niveau 2</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1105"/>
         <source>Heading 3</source>
-        <translation>En-Tête Niveau 3</translation>
+        <translation>Titre Niveau 3</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1107"/>
         <source>Heading 4</source>
-        <translation>En-Tête Niveau 4</translation>
+        <translation>Titre Niveau 4</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1109"/>
         <source>Heading 5</source>
-        <translation>En-Tête Niveau 5</translation>
+        <translation>Titre Niveau 5</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1111"/>
