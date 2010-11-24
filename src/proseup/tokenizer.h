@@ -63,7 +63,6 @@ namespace PROSEUP
 	public:
 		Tokenizer();
                 QList<Token> tokenize(QIODevice* device);
-
         private:
                 QList<Token> handle_inline(QString& text);
                 QList<Token> handle_header(QString& text);
@@ -73,7 +72,8 @@ namespace PROSEUP
                 QList<Token> handle_blockquote(QString& text);
 
 	};
-
+        QString escape_string(QString text,bool is_at_start);
+        QString unescape_string(QString text);
 }
 
 #endif // TOKENIZER_H

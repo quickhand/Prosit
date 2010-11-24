@@ -11,7 +11,7 @@ public:
 
 protected:
     void insertFromMimeData ( const QMimeData * source );
-
+    QMimeData* createMimeDataFromSelection() const;
 signals:
 
 public slots:

@@ -102,11 +102,14 @@ void PROSEUP::Reader::read(const QString& filename, Editor* text)
                             QString hlcomment;
                             if(cur.data.length()>=2)
                             {
-                                mycolor.setNamedColor(cur.data[0]);
+                                if(cur.data[0].length()>0)
+                                    mycolor.setNamedColor(cur.data[0]);
+                                else
+                                    mycolor.setNamedColor("lightyellow");
                                 hlcomment=cur.data[1];
                             }
-                            else if(cur.data.length()==1)
-                                mycolor.setNamedColor(cur.data[0]);
+                            else if(cur.data.length()==1 && cur.data[0].length()>0)
+                                    mycolor.setNamedColor(cur.data[0]);
                             else
                                 mycolor.setNamedColor("lightyellow");
                             backb.setColor(mycolor);

@@ -19,6 +19,7 @@
 
 #include "writer.h"
 #include "../editor.h"
+#include "tokenizer.h"
 #include <QFile>
 #include <QTextBlock>
 #include <QTextCodec>
@@ -50,8 +51,8 @@ bool PROSEUP::Writer::write(const QString& filename, Editor* text)
         QBrush hlbrush;
         QString hlcomment;
 	for (QTextBlock block = text->document()->begin(); block.isValid(); block = block.next()) {
-		QTextBlockFormat block_format = block.blockFormat();
-
+                int blockwritecount=0;
+                QTextBlockFormat block_format = block.blockFormat();
                 QString startblock,endblock;
                 QString uprop=block_format.stringProperty(QTextFormat::UserProperty);
                 if(block.length()==0&&uprop!="PRE"&&!uprop.startsWith("DIVIDER"))
@@ -60,7 +61,9 @@ bool PROSEUP::Writer::write(const QString& filename, Editor* text)
                 {
                     startblock="\n";
                     if(uprop!="PRE")
+                    {
                         startblock+="\n";
+                    }
                 }
                 if(uprop!="PRE" && last_was_pre)
                 {
@@ -96,6 +99,11 @@ bool PROSEUP::Writer::write(const QString& filename, Editor* text)
                     file.write(startblock.toUtf8());
                     continue;
                 }
+                int lastnewline=startblock.lastIndexOf(QChar('\n'));
+                if(lastnewline>0)
+                    blockwritecount+=startblock.length()-lastnewline-1;
+                else
+                    blockwritecount=startblock.length();
                 file.write(startblock.toUtf8());
 		if (block.begin() != block.end()) {
 
@@ -150,7 +158,7 @@ bool PROSEUP::Writer::write(const QString& filename, Editor* text)
                                         del_on=true;
                                 }
 
-                                if(char_format.background()!=Qt::NoBrush && char_format.background()!=block.blockFormat().background() && !hl_on) {
+                                /*if(char_format.background()!=Qt::NoBrush && char_format.background()!=block.blockFormat().background() && !hl_on) {
                                     hlcomment=char_format.stringProperty(QTextFormat::TextToolTip);
                                     hlbrush=char_format.background();
                                     innertext += "{";
@@ -163,11 +171,31 @@ bool PROSEUP::Writer::write(const QString& filename, Editor* text)
                                     hlcomment=char_format.stringProperty(QTextFormat::TextToolTip);
                                     hlbrush=char_format.background();
                                     hl_on=true;
+                                }*/
+                                if(char_format.background()!=Qt::NoBrush && char_format.background()!=block.blockFormat().background() && !hl_on) {
+                                    hlcomment=char_format.stringProperty(QTextFormat::TextToolTip);
+                                    hlbrush=char_format.background();
+                                    innertext += "{";
+                                    if(hlbrush.color().name()!="lightyellow")
+                                        innertext+=hlbrush.color().name();
+                                    if(hlcomment.length()>0)
+                                        innertext+=QString(";")+hlcomment;
+
+                                    innertext += "%";
+                                    hlcomment=char_format.stringProperty(QTextFormat::TextToolTip);
+                                    hlbrush=char_format.background();
+                                    hl_on=true;
                                 }
-                                innertext+=fragment.text();
+                                if(blockwritecount+innertext.length()==0)
+                                {
+
+                                    innertext+=PROSEUP::escape_string(fragment.text(),true);
+                                }
+                                else
+                                    innertext+=PROSEUP::escape_string(fragment.text(),false);
 
 
-
+                                blockwritecount+=innertext.length();
                                 file.write(innertext.toUtf8());
 
 
@@ -220,6 +248,7 @@ bool PROSEUP::Writer::write(const QString& filename, Editor* text)
                 }
                 else if(uprop=="BLOCKQUOTE")
                     endblock+=">";
+                blockwritecount+=endblock.length();
                 file.write(endblock.toUtf8());
 	}
 

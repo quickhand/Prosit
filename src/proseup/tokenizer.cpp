@@ -93,7 +93,8 @@ QList<PROSEUP::Token> PROSEUP::Tokenizer::handle_inline(QString& text)
 {
 //Here's a ~*paragr*aph~ with some    odd. Punctuation; (whatdyya think?).
     QList<PROSEUP::Token> tokenlist;
-    QRegExp splitter=QRegExp("\\\\?(\\*|~|\\{\\+|\\+\\}|\\{\\-|\\-\\}|\\{(?:%[^%\\*~\\{\\}<>]+%)?(?:%[^%\\*~\\{\\}<>]+%)*%|%\\})");
+    //QRegExp splitter=QRegExp("\\\\?(\\*|~|\\{\\+|\\+\\}|\\{\\-|\\-\\}|\\{(?:%[^%\\*~\\{\\}<>]+%)?(?:%[^%\\*~\\{\\}<>]+%)*%|%\\})");
+    QRegExp splitter=QRegExp("\\\\?(\\{[^\\+\\-%][^%]*%|\\*|~|\\{\\+|\\+\\}|\\{\\-|\\-\\}|\\{%|%\\})");
     QStringList splitlist;
     int stringind=0;
     int tagind;
@@ -121,6 +122,7 @@ QList<PROSEUP::Token> PROSEUP::Tokenizer::handle_inline(QString& text)
     bool lastemph=false;
     for(int i=0;i<splitlist.length();i++)
     {
+        //std::cout<<splitlist[i].toStdString()<<std::endl;
         if(splitlist[i]=="*")
         {
             if(!emph_on)
@@ -176,15 +178,17 @@ QList<PROSEUP::Token> PROSEUP::Tokenizer::handle_inline(QString& text)
             token.is_end=true;
             tokenlist.append(token);
         }
-        else if(splitlist[i].startsWith("{%"))
+        else if(splitlist[i].startsWith("{") && splitlist[i].endsWith("%"))
         {
             PROSEUP::Token token;
             token.ttype=PROSEUP::HL;
             token.is_start=true;
             token.is_end=false;
-            QRegExp splitter2=QRegExp("\\{%|%%");
-            QStringList splitlist2=splitlist[i].split(splitter2,QString::SkipEmptyParts);
-            token.data.append(splitlist2);
+            //QRegExp splitter2=QRegExp("\\{%|%%");
+            //QStringList splitlist2=splitlist[i].split(splitter2,QString::SkipEmptyParts);
+            QStringList splitlist2=splitlist[i].mid(1,splitlist[i].length()-2).split(QChar(';'),QString::KeepEmptyParts);
+            if(splitlist2.length()>1||(splitlist2.length()==1&&splitlist2[0].length()>0))
+                token.data.append(splitlist2);
             tokenlist.append(token);
         }
         else if(splitlist[i]=="%}")
@@ -201,7 +205,7 @@ QList<PROSEUP::Token> PROSEUP::Tokenizer::handle_inline(QString& text)
             token.ttype=PROSEUP::TEXT;
             token.is_start=false;
             token.is_end=false;
-            token.data.append(splitlist[i]);
+            token.data.append(unescape_string(splitlist[i]));
             tokenlist.append(token);
         }
     }
@@ -391,6 +395,23 @@ QList<PROSEUP::Token> PROSEUP::Tokenizer::handle_blockquote(QString& text)
 
     }
     return tokenlist;
+}
+QString PROSEUP::escape_string(QString text,bool is_at_start) {
+        text.replace("\\","\\\\");
+        if(is_at_start &&(text.startsWith('-')||text.startsWith('@')||text.startsWith('<')||text.startsWith('#')))
+                text.insert(0,QChar('\\'));
+        text.replace("*","\\*");
+        text.replace("~","\\~");
+        text.replace("{","\\{");
+        text.replace("}","\\}");
+        return text;
+}
+
+QString PROSEUP::unescape_string(QString text) {
+        text.replace("\\\\","&#92;");
+        text.replace("\\","");
+        text.replace("&#92;","\\");
+        return text;
 }
 
 //-----------------------------------------------------------------------------
