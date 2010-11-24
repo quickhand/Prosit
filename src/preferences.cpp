@@ -109,6 +109,7 @@ Preferences::Preferences()
         m_block_default_format.insert("ATTRIBUTION",attformat);
         QTextBlockFormat preformat=QTextBlockFormat();
         preformat.setProperty(QTextFormat::UserProperty,"PRE");
+        preformat.setNonBreakableLines(true);
         m_block_default_format.insert("PRE",preformat);
         QTextBlockFormat d1format=QTextBlockFormat();
         d1format.setProperty(QTextFormat::UserProperty,"DIVIDER1");
