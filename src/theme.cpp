@@ -28,7 +28,9 @@
 #include <QPainter>
 #include <QSettings>
 #include <QUrl>
-
+#include <QStringList>
+#include <QTextBlockFormat>
+#include <QHash>
 //-----------------------------------------------------------------------------
 
 namespace
@@ -128,6 +130,67 @@ Theme::Theme(const QString& name)
 	m_text_color = settings.value("Text/Color", "#000000").toString();
 	m_text_font.fromString(settings.value("Text/Font", QFont().toString()).toString());
 	m_misspelled_color = settings.value("Text/Misspelled", "#ff0000").toString();
+
+        //setup paragraph styles
+        QTextBlockFormat baseformat;
+        baseformat.setBottomMargin(10.0);
+        baseformat.setAlignment(Qt::AlignLeft);
+        m_block_default_format.insert("default",baseformat);
+        QTextBlockFormat h1format=QTextBlockFormat(baseformat),h2format=QTextBlockFormat(baseformat),h3format=QTextBlockFormat(baseformat),h4format=QTextBlockFormat(baseformat),h5format=QTextBlockFormat(baseformat);
+        h1format.setProperty(QTextFormat::UserProperty,"H1");
+        h2format.setProperty(QTextFormat::UserProperty,"H2");
+        h3format.setProperty(QTextFormat::UserProperty,"H3");
+        h4format.setProperty(QTextFormat::UserProperty,"H4");
+        h5format.setProperty(QTextFormat::UserProperty,"H5");
+        m_block_default_format.insert("H1",h1format);
+        m_block_default_format.insert("H2",h2format);
+        m_block_default_format.insert("H3",h3format);
+        m_block_default_format.insert("H4",h4format);
+        m_block_default_format.insert("H5",h5format);
+        QTextBlockFormat bqformat=QTextBlockFormat(baseformat);
+        bqformat.setProperty(QTextFormat::UserProperty,"BLOCKQUOTE");
+        bqformat.setLeftMargin(50.0);
+        bqformat.setRightMargin(50.0);
+        m_block_default_format.insert("BLOCKQUOTE",bqformat);
+        QTextBlockFormat attformat=QTextBlockFormat(baseformat);
+        attformat.setAlignment(Qt::AlignRight);
+        attformat.setProperty(QTextFormat::UserProperty,"ATTRIBUTION");
+        attformat.setBottomMargin(15.0);
+        attformat.setLeftMargin(50.0);
+        attformat.setRightMargin(50.0);
+        attformat.setNonBreakableLines(true);
+        m_block_default_format.insert("ATTRIBUTION",attformat);
+        QTextBlockFormat preformat=QTextBlockFormat();
+        preformat.setProperty(QTextFormat::UserProperty,"PRE");
+        preformat.setNonBreakableLines(true);
+        m_block_default_format.insert("PRE",preformat);
+        QTextBlockFormat d1format=QTextBlockFormat();
+        d1format.setProperty(QTextFormat::UserProperty,"DIVIDER1");
+        m_block_default_format.insert("DIVIDER1",d1format);
+        QTextBlockFormat d2format=QTextBlockFormat();
+        d2format.setProperty(QTextFormat::UserProperty,"DIVIDER2");
+        d2format.setTopMargin(5);
+        d2format.setBottomMargin(5);
+        m_block_default_format.insert("DIVIDER2",d2format);
+        QTextBlockFormat d3format=QTextBlockFormat();
+        d3format.setProperty(QTextFormat::UserProperty,"DIVIDER3");
+        d3format.setTopMargin(5);
+        d3format.setBottomMargin(10);
+        d3format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,20));
+        m_block_default_format.insert("DIVIDER3",d3format);
+        QTextBlockFormat d4format=QTextBlockFormat();
+        d4format.setProperty(QTextFormat::UserProperty,"DIVIDER4");
+        d4format.setTopMargin(10);
+        d4format.setBottomMargin(15);
+        d4format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,50));
+        m_block_default_format.insert("DIVIDER4",d4format);
+        QTextBlockFormat d5format=QTextBlockFormat();
+        d5format.setProperty(QTextFormat::UserProperty,"DIVIDER5");
+        d5format.setTopMargin(15);
+        d5format.setBottomMargin(25);
+        d5format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,100));
+        m_block_default_format.insert("DIVIDER5",d5format);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -465,3 +528,17 @@ void Theme::setMisspelledColor(const QColor& color)
 }
 
 //-----------------------------------------------------------------------------
+
+QTextBlockFormat Theme::defaultFormatForBlock(QString uprop) const
+{
+    if(!m_block_default_format.keys().contains(uprop))
+        return m_block_default_format.find("default").value();
+
+    return m_block_default_format.find(uprop).value();
+}
+
+QStringList Theme::definedDefaultFormatsForBlocks() const
+{
+    QStringList retlist=QStringList(m_block_default_format.keys());
+    return retlist;
+}

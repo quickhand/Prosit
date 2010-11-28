@@ -321,6 +321,10 @@ void Document::loadTheme(const Theme& theme)
 {
 	m_text->document()->blockSignals(true);
 
+        m_block_default_format.clear();
+        for(int i=0;i<theme.definedDefaultFormatsForBlocks().length();i++)
+            m_block_default_format.insert(theme.definedDefaultFormatsForBlocks()[i],theme.defaultFormatForBlock(theme.definedDefaultFormatsForBlocks()[i]));
+
 	// Update colors
 	QColor color = theme.foregroundColor();
 	color.setAlpha(theme.foregroundOpacity() * 2.55f);
@@ -377,9 +381,10 @@ void Document::loadTheme(const Theme& theme)
 		m_layout->setColumnStretch(0, 0);
 		m_layout->setColumnStretch(2, 0);
 	}
-
+        cleanUpDocument(false);
 	centerCursor(true);
 	m_text->document()->blockSignals(false);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -413,8 +418,7 @@ void Document::loadPreferences(const Preferences& preferences)
 	m_highlighter->setEnabled(!isReadOnly() ? preferences.highlightMisspelled() : false);
 
 
-        for(int i=0;i<preferences.definedDefaultFormatsForBlocks().length();i++)
-            m_block_default_format.insert(preferences.definedDefaultFormatsForBlocks()[i],preferences.defaultFormatForBlock(preferences.definedDefaultFormatsForBlocks()[i]));
+
 }
 
 //-----------------------------------------------------------------------------

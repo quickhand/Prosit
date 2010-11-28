@@ -25,8 +25,11 @@
 #include <QColor>
 #include <QCoreApplication>
 #include <QFont>
+#include <QHash>
 class QImage;
 class QSize;
+class QTextBlockFormat;
+class QStringList;
 
 class Theme : public SettingsFile
 {
@@ -79,6 +82,8 @@ public:
 	void setTextColor(const QColor& color);
 	void setTextFont(const QFont& font);
 	void setMisspelledColor(const QColor& color);
+        QTextBlockFormat defaultFormatForBlock(QString uprop) const;
+        QStringList definedDefaultFormatsForBlocks() const;
 
 private:
 	static QString m_path;
@@ -99,6 +104,7 @@ private:
 	QColor m_text_color;
 	QFont m_text_font;
 	QColor m_misspelled_color;
+        QHash<QString,QTextBlockFormat> m_block_default_format;
 };
 
 #endif
