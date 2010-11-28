@@ -143,85 +143,12 @@ void Highlighter::highlightBlock(const QString& text)
 {
         QTextCharFormat hformat;
         QTextBlockFormat blockformat=currentBlock().blockFormat();
-        if(currentBlock().blockFormat().hasProperty(QTextFormat::UserProperty)) {
-                QString userprop=currentBlock().blockFormat().stringProperty(QTextFormat::UserProperty);
-                if(userprop=="H1") {
-                        hformat.setProperty(QTextFormat::FontSizeAdjustment,3);
-                        hformat.setFontWeight(QFont::Bold);
-                        blockformat.setBottomMargin(10.0);
-                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                } else if(userprop=="H2") {
-                        hformat.setProperty(QTextFormat::FontSizeAdjustment,2);
-                        hformat.setFontWeight(QFont::Bold);
-                        blockformat.setBottomMargin(10.0);
-                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                } else if(userprop=="H3") {
-                        hformat.setProperty(QTextFormat::FontSizeAdjustment,1);
-                        hformat.setFontWeight(QFont::Bold);
-                        blockformat.setBottomMargin(10.0);
-                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                        blockformat.colorProperty(QTextFormat::BlockRightMargin);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                } else if(userprop=="H4") {
-                        hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
-                        hformat.setFontWeight(QFont::Bold);
-                        blockformat.setBottomMargin(10.0);
-                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                } else if(userprop=="H5") {
-                        hformat.setProperty(QTextFormat::FontSizeAdjustment,-1);
-                        hformat.setFontWeight(QFont::Bold);
-                        blockformat.setBottomMargin(10.0);
-                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                } else if(userprop=="BLOCKQUOTE") {
-                        hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
-                        hformat.setFontItalic(true);
-                        blockformat.setBottomMargin(10.0);
-                        blockformat.setLeftMargin(50.0);
-                        blockformat.setRightMargin(50.0);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                } else if(userprop=="ATTRIBUTION") {
-                        hformat.setProperty(QTextFormat::FontSizeAdjustment,0);
-                        hformat.setFontItalic(true);
-                        blockformat.setBottomMargin(10.0);
-                        blockformat.setLeftMargin(50.0);
-                        blockformat.setRightMargin(50.0);
-                        blockformat.setAlignment(Qt::AlignRight);
-                } else if(userprop=="PRE") {
-                        blockformat.clearProperty(QTextFormat::BlockBottomMargin);
-                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                } else {
-                        blockformat.clearProperty(QTextFormat::BlockBottomMargin);
-                        blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-                        blockformat.clearProperty(QTextFormat::BlockRightMargin);
-                        blockformat.setAlignment(Qt::AlignLeft);
-                }
-//                QTextCursor blockcurse=QTextCursor(currentBlock());
-//                blockcurse.setBlockFormat(blockformat);
-//                blockcurse.setPosition(m_text->textCursor().anchor());
-//                blockcurse.setPosition(m_text->textCursor().position(),QTextCursor::KeepAnchor);
-//                m_text->setTextCursor(blockcurse);
-
-                setFormat(0,text.length(),hformat);
-        } else {
-//                blockformat.setBottomMargin(10.0);
-//                blockformat.clearProperty(QTextFormat::BlockLeftMargin);
-//                blockformat.clearProperty(QTextFormat::BlockRightMargin);
-//                blockformat.setAlignment(Qt::AlignLeft);
-//                QTextCursor blockcurse=QTextCursor(currentBlock());
-//                blockcurse.setBlockFormat(blockformat);
-//                blockcurse.setPosition(m_text->textCursor().anchor());
-//                blockcurse.setPosition(m_text->textCursor().position(),QTextCursor::KeepAnchor);
-//                m_text->setTextCursor(blockcurse);
+        if(blockformat.hasProperty(QTextFormat::UserProperty))
+        {
+            hformat.setProperty(QTextFormat::FontWeight,blockformat.property(QTextFormat::FontWeight));
+            hformat.setProperty(QTextFormat::FontItalic,blockformat.property(QTextFormat::FontItalic));
+            hformat.setProperty(QTextFormat::FontSizeAdjustment,blockformat.property(QTextFormat::FontSizeAdjustment));
+            setFormat(0,text.length(),hformat);
         }
 
 	if (!m_enabled) {
