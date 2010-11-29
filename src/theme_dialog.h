@@ -32,6 +32,7 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 class QSpinBox;
+class QCheckBox;
 
 class ThemeDialog : public QDialog
 {
@@ -48,7 +49,7 @@ public slots:
 private slots:
 	void checkNameAvailable();
 	void renderPreview();
-
+        void updateStylingControls(int index);
 private:
 	void savePreview();
 
@@ -76,6 +77,16 @@ private:
 	QFontComboBox* m_font_names;
 	QComboBox* m_font_sizes;
 	ColorButton* m_misspelled_color;
+
+        QComboBox* m_current_block_type;
+        QSpinBox* m_styling_adjustment;
+        QCheckBox* m_styling_bold;
+        QCheckBox* m_styling_italic;
+        QComboBox* m_styling_align;
+        QSpinBox* m_styling_l_margin;
+        QSpinBox* m_styling_r_margin;
+        QSpinBox* m_styling_t_margin;
+        QSpinBox* m_styling_b_margin;
 };
 
 #endif

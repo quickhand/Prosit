@@ -34,6 +34,9 @@
 #include <QSpinBox>
 #include <QTabWidget>
 #include <QVBoxLayout>
+#include <QCheckBox>
+#include <QTextBlockFormat>
+#include <iostream>
 
 //-----------------------------------------------------------------------------
 
@@ -182,6 +185,70 @@ ThemeDialog::ThemeDialog(Theme& theme, QWidget* parent)
 	text_layout->addRow(tr("Font:"), font_layout);
 	text_layout->addRow(tr("Misspelled:"), m_misspelled_color);
 
+        // Create styling group
+        tab = new QWidget(this);
+        tabs->addTab(tab, tr("Text Styling"));
+        m_current_block_type = new QComboBox(tab);
+
+        m_current_block_type->addItem(tr("Default"),m_theme.defaultFormatForBlock("default"));
+        m_current_block_type->addItem(tr("Heading 1"),m_theme.defaultFormatForBlock("H1"));
+        m_current_block_type->addItem(tr("Heading 2"),m_theme.defaultFormatForBlock("H2"));
+        m_current_block_type->addItem(tr("Heading 3"),m_theme.defaultFormatForBlock("H3"));
+        m_current_block_type->addItem(tr("Heading 4"),m_theme.defaultFormatForBlock("H4"));
+        m_current_block_type->addItem(tr("Heading 5"),m_theme.defaultFormatForBlock("H5"));
+        m_current_block_type->addItem(tr("Blockquote"),m_theme.defaultFormatForBlock("BLOCKQUOTE"));
+        m_current_block_type->addItem(tr("Attribution"),m_theme.defaultFormatForBlock("ATTRIBUTION"));
+        m_current_block_type->addItem(tr("Preformatted Line"),m_theme.defaultFormatForBlock("PRE"));
+        connect(m_current_block_type,SIGNAL(currentIndexChanged(int)),this,SLOT(updateStylingControls(int)));
+
+        m_styling_adjustment = new QSpinBox(tab);
+        m_styling_adjustment->setCorrectionMode(QSpinBox::CorrectToNearestValue);
+        m_styling_adjustment->setRange(-5,5);
+
+        m_styling_bold = new QCheckBox(tab);
+
+        m_styling_italic = new QCheckBox(tab);
+
+        m_styling_align = new QComboBox(tab);
+        m_styling_align->addItems(QStringList() << tr("Left") << tr("Center") << tr("Right"));
+
+        m_styling_l_margin = new QSpinBox(tab);
+        m_styling_l_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
+        m_styling_l_margin->setSuffix(tr(" pixels"));
+        m_styling_l_margin->setRange(0, 250);
+
+        m_styling_r_margin = new QSpinBox(tab);
+        m_styling_r_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
+        m_styling_r_margin->setSuffix(tr(" pixels"));
+        m_styling_r_margin->setRange(0, 250);
+
+        m_styling_t_margin = new QSpinBox(tab);
+        m_styling_t_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
+        m_styling_t_margin->setSuffix(tr(" pixels"));
+        m_styling_t_margin->setRange(0, 250);
+
+        m_styling_b_margin = new QSpinBox(tab);
+        m_styling_b_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
+        m_styling_b_margin->setSuffix(tr(" pixels"));
+        m_styling_b_margin->setRange(0, 250);
+
+        QVBoxLayout* styling_layout = new QVBoxLayout(tab);
+        QFormLayout* styling_options_layout = new QFormLayout();
+        styling_options_layout->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
+        styling_options_layout->setFormAlignment(Qt::AlignHCenter | Qt::AlignTop);
+        styling_options_layout->setLabelAlignment(Qt::AlignRight);
+        styling_options_layout->addRow(tr("Size Adjustment:"), m_styling_adjustment);
+        styling_options_layout->addRow(tr("Bold:"), m_styling_bold);
+        styling_options_layout->addRow(tr("Italic:"), m_styling_italic);
+        styling_options_layout->addRow(tr("Alignment:"), m_styling_align);
+        styling_options_layout->addRow(tr("Left Margin:"), m_styling_l_margin);
+        styling_options_layout->addRow(tr("Right Margin:"), m_styling_r_margin);
+        styling_options_layout->addRow(tr("Top Margin:"), m_styling_t_margin);
+        styling_options_layout->addRow(tr("Bottom Margin:"), m_styling_b_margin);
+
+        styling_layout->addWidget(m_current_block_type);
+        styling_layout->addLayout(styling_options_layout);
+
 
 	// Create preview
 	m_preview = new QLabel(this);
@@ -205,6 +272,8 @@ ThemeDialog::ThemeDialog(Theme& theme, QWidget* parent)
 	layout->addLayout(name_layout);
 	layout->addLayout(contents_layout);
 	layout->addWidget(buttons);
+
+        updateStylingControls(m_current_block_type->currentIndex());
 }
 
 //-----------------------------------------------------------------------------
@@ -296,3 +365,29 @@ void ThemeDialog::savePreview()
 }
 
 //-----------------------------------------------------------------------------
+
+void ThemeDialog::updateStylingControls(int index)
+{
+
+    QTextBlockFormat bf=m_current_block_type->itemData(index).value<QTextFormat>().toBlockFormat();
+
+    m_styling_adjustment->setValue(bf.intProperty(QTextFormat::FontSizeAdjustment));
+    m_styling_italic->setChecked(bf.boolProperty(QTextFormat::FontItalic));
+
+    if(bf.intProperty(QTextFormat::FontWeight)==QFont::Bold)
+        m_styling_bold->setChecked(true);
+    else
+        m_styling_bold->setChecked(false);
+
+    if(bf.alignment()==Qt::AlignRight)
+        m_styling_align->setCurrentIndex(2);
+    else if(bf.alignment()==Qt::AlignCenter)
+        m_styling_align->setCurrentIndex(1);
+    else
+        m_styling_align->setCurrentIndex(0);
+
+    m_styling_l_margin->setValue((int)bf.doubleProperty(QTextFormat::BlockLeftMargin));
+    m_styling_r_margin->setValue((int)bf.doubleProperty(QTextFormat::BlockRightMargin));
+    m_styling_t_margin->setValue((int)bf.doubleProperty(QTextFormat::BlockTopMargin));
+    m_styling_b_margin->setValue((int)bf.doubleProperty(QTextFormat::BlockBottomMargin));
+}

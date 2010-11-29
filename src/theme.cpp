@@ -131,77 +131,149 @@ Theme::Theme(const QString& name)
 	m_text_font.fromString(settings.value("Text/Font", QFont().toString()).toString());
 	m_misspelled_color = settings.value("Text/Misspelled", "#ff0000").toString();
 
+        QStringList blocktypes;
+        blocktypes<<"default"<<"H1"<<"H2"<<"H3"<<"H4"<<"H5"<<"BLOCKQUOTE"<<"ATTRIBUTION"<<"DIVIDER1"<<"DIVIDER2"<<"DIVIDER3"<<"DIVIDER4"<<"DIVIDER5"<<"PRE";
+        QStringListIterator it(blocktypes);
+
+        while(it.hasNext())
+        {
+            QString thetype=it.next();
+            QTextBlockFormat format;
+            if(settings.contains(QString("Styles/")+thetype+QString("/FontWeight")))
+            {
+                int weight=settings.value(QString("Styles/")+thetype+QString("/FontWeight")).toInt();
+                if(weight!=0)
+                    format.setProperty(QTextFormat::FontWeight,QFont::Bold);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/FontItalic")))
+            {
+                bool italic=settings.value(QString("Styles/")+thetype+QString("/FontItalic")).toBool();
+                if(italic)
+                    format.setProperty(QTextFormat::FontItalic,true);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/FontSizeAdjustment")))
+            {
+                int adjustment=settings.value(QString("Styles/")+thetype+QString("/FontSizeAdjustment")).toInt();
+                if(adjustment!=0)
+                    format.setProperty(QTextFormat::FontSizeAdjustment,adjustment);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/BlockLeftMargin")))
+            {
+                double margin=settings.value(QString("Styles/")+thetype+QString("/BlockLeftMargin")).toDouble();
+                if(margin!=0)
+                    format.setProperty(QTextFormat::BlockLeftMargin,margin);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/BlockRightMargin")))
+            {
+                double margin=settings.value(QString("Styles/")+thetype+QString("/BlockRightMargin")).toDouble();
+                if(margin!=0)
+                    format.setProperty(QTextFormat::BlockRightMargin,margin);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/BlockTopMargin")))
+            {
+                double margin=settings.value(QString("Styles/")+thetype+QString("/BlockTopMargin")).toDouble();
+                if(margin!=0)
+                    format.setProperty(QTextFormat::BlockTopMargin,margin);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/BlockBottomMargin")))
+            {
+                double margin=settings.value(QString("Styles/")+thetype+QString("/BlockBottomMargin")).toDouble();
+                if(margin!=0)
+                    format.setProperty(QTextFormat::BlockBottomMargin,margin);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/BlockAlignment")))
+            {
+                int align=settings.value(QString("Styles/")+thetype+QString("/BlockAlignment")).toInt();
+                format.setProperty(QTextFormat::BlockAlignment,align);
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/BlockTrailingHorizontalRulerWidth")))
+            {
+                double rulewidth=settings.value(QString("Styles/")+thetype+QString("/BlockTrailingHorizontalRulerWidth")).toDouble();
+                if(rulewidth!=0)
+                    format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,rulewidth));
+            }
+            if(settings.contains(QString("Styles/")+thetype+QString("/BlockNonBreakableLines")))
+            {
+                bool nobreak=settings.value(QString("Styles/")+thetype+QString("/BlockNonBreakableLines")).toBool();
+                if(nobreak)
+                    format.setProperty(QTextFormat::BlockNonBreakableLines,nobreak);
+            }
+            if(thetype!="default")
+                format.setProperty(QTextFormat::UserProperty,thetype);
+            m_block_default_format.insert(thetype,format);
+        }
+
         //setup paragraph styles
-        QTextBlockFormat baseformat;
-        baseformat.setBottomMargin(10.0);
-        baseformat.setAlignment(Qt::AlignLeft);
-        m_block_default_format.insert("default",baseformat);
-        QTextBlockFormat h1format=QTextBlockFormat(baseformat),h2format=QTextBlockFormat(baseformat),h3format=QTextBlockFormat(baseformat),h4format=QTextBlockFormat(baseformat),h5format=QTextBlockFormat(baseformat);
-        h1format.setProperty(QTextFormat::UserProperty,"H1");
-        h1format.setProperty(QTextFormat::FontWeight,QFont::Bold);
-        h1format.setProperty(QTextFormat::FontSizeAdjustment,3);
-        h2format.setProperty(QTextFormat::UserProperty,"H2");
-        h2format.setProperty(QTextFormat::FontWeight,QFont::Bold);
-        h2format.setProperty(QTextFormat::FontSizeAdjustment,2);
-        h3format.setProperty(QTextFormat::UserProperty,"H3");
-        h3format.setProperty(QTextFormat::FontWeight,QFont::Bold);
-        h3format.setProperty(QTextFormat::FontSizeAdjustment,1);
-        h4format.setProperty(QTextFormat::UserProperty,"H4");
-        h4format.setProperty(QTextFormat::FontWeight,QFont::Bold);
-        h4format.setProperty(QTextFormat::FontSizeAdjustment,0);
-        h5format.setProperty(QTextFormat::UserProperty,"H5");
-        h5format.setProperty(QTextFormat::FontWeight,QFont::Bold);
-        h5format.setProperty(QTextFormat::FontSizeAdjustment,-1);
-        m_block_default_format.insert("H1",h1format);
-        m_block_default_format.insert("H2",h2format);
-        m_block_default_format.insert("H3",h3format);
-        m_block_default_format.insert("H4",h4format);
-        m_block_default_format.insert("H5",h5format);
-        QTextBlockFormat bqformat=QTextBlockFormat(baseformat);
-        bqformat.setProperty(QTextFormat::UserProperty,"BLOCKQUOTE");
-        bqformat.setProperty(QTextFormat::FontItalic,true);
-        bqformat.setLeftMargin(50.0);
-        bqformat.setRightMargin(50.0);
-        m_block_default_format.insert("BLOCKQUOTE",bqformat);
-        QTextBlockFormat attformat=QTextBlockFormat(baseformat);
-        attformat.setAlignment(Qt::AlignRight);
-        attformat.setProperty(QTextFormat::UserProperty,"ATTRIBUTION");
-        attformat.setProperty(QTextFormat::FontItalic,true);
-        attformat.setBottomMargin(15.0);
-        attformat.setLeftMargin(50.0);
-        attformat.setRightMargin(50.0);
-        attformat.setNonBreakableLines(true);
-        m_block_default_format.insert("ATTRIBUTION",attformat);
-        QTextBlockFormat preformat=QTextBlockFormat();
-        preformat.setProperty(QTextFormat::UserProperty,"PRE");
-        preformat.setNonBreakableLines(true);
-        m_block_default_format.insert("PRE",preformat);
-        QTextBlockFormat d1format=QTextBlockFormat();
-        d1format.setProperty(QTextFormat::UserProperty,"DIVIDER1");
-        m_block_default_format.insert("DIVIDER1",d1format);
-        QTextBlockFormat d2format=QTextBlockFormat();
-        d2format.setProperty(QTextFormat::UserProperty,"DIVIDER2");
-        d2format.setTopMargin(5);
-        d2format.setBottomMargin(5);
-        m_block_default_format.insert("DIVIDER2",d2format);
-        QTextBlockFormat d3format=QTextBlockFormat();
-        d3format.setProperty(QTextFormat::UserProperty,"DIVIDER3");
-        d3format.setTopMargin(5);
-        d3format.setBottomMargin(10);
-        d3format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,20));
-        m_block_default_format.insert("DIVIDER3",d3format);
-        QTextBlockFormat d4format=QTextBlockFormat();
-        d4format.setProperty(QTextFormat::UserProperty,"DIVIDER4");
-        d4format.setTopMargin(10);
-        d4format.setBottomMargin(15);
-        d4format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,50));
-        m_block_default_format.insert("DIVIDER4",d4format);
-        QTextBlockFormat d5format=QTextBlockFormat();
-        d5format.setProperty(QTextFormat::UserProperty,"DIVIDER5");
-        d5format.setTopMargin(15);
-        d5format.setBottomMargin(25);
-        d5format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,100));
-        m_block_default_format.insert("DIVIDER5",d5format);
+//        QTextBlockFormat baseformat;
+//        baseformat.setBottomMargin(10.0);
+//        baseformat.setAlignment(Qt::AlignLeft);
+//        m_block_default_format.insert("default",baseformat);
+//        QTextBlockFormat h1format=QTextBlockFormat(baseformat),h2format=QTextBlockFormat(baseformat),h3format=QTextBlockFormat(baseformat),h4format=QTextBlockFormat(baseformat),h5format=QTextBlockFormat(baseformat);
+//        h1format.setProperty(QTextFormat::UserProperty,"H1");
+//        h1format.setProperty(QTextFormat::FontWeight,QFont::Bold);
+//        h1format.setProperty(QTextFormat::FontSizeAdjustment,3);
+//        h2format.setProperty(QTextFormat::UserProperty,"H2");
+//        h2format.setProperty(QTextFormat::FontWeight,QFont::Bold);
+//        h2format.setProperty(QTextFormat::FontSizeAdjustment,2);
+//        h3format.setProperty(QTextFormat::UserProperty,"H3");
+//        h3format.setProperty(QTextFormat::FontWeight,QFont::Bold);
+//        h3format.setProperty(QTextFormat::FontSizeAdjustment,1);
+//        h4format.setProperty(QTextFormat::UserProperty,"H4");
+//        h4format.setProperty(QTextFormat::FontWeight,QFont::Bold);
+//        h4format.setProperty(QTextFormat::FontSizeAdjustment,0);
+//        h5format.setProperty(QTextFormat::UserProperty,"H5");
+//        h5format.setProperty(QTextFormat::FontWeight,QFont::Bold);
+//        h5format.setProperty(QTextFormat::FontSizeAdjustment,-1);
+//        m_block_default_format.insert("H1",h1format);
+//        m_block_default_format.insert("H2",h2format);
+//        m_block_default_format.insert("H3",h3format);
+//        m_block_default_format.insert("H4",h4format);
+//        m_block_default_format.insert("H5",h5format);
+//        QTextBlockFormat bqformat=QTextBlockFormat(baseformat);
+//        bqformat.setProperty(QTextFormat::UserProperty,"BLOCKQUOTE");
+//        bqformat.setProperty(QTextFormat::FontItalic,true);
+//        bqformat.setLeftMargin(50.0);
+//        bqformat.setRightMargin(50.0);
+//        m_block_default_format.insert("BLOCKQUOTE",bqformat);
+//        QTextBlockFormat attformat=QTextBlockFormat(baseformat);
+//        attformat.setAlignment(Qt::AlignRight);
+//        attformat.setProperty(QTextFormat::UserProperty,"ATTRIBUTION");
+//        attformat.setProperty(QTextFormat::FontItalic,true);
+//        attformat.setBottomMargin(15.0);
+//        attformat.setLeftMargin(50.0);
+//        attformat.setRightMargin(50.0);
+//        attformat.setNonBreakableLines(true);
+//        m_block_default_format.insert("ATTRIBUTION",attformat);
+//        QTextBlockFormat preformat=QTextBlockFormat();
+//        preformat.setProperty(QTextFormat::UserProperty,"PRE");
+//        preformat.setNonBreakableLines(true);
+//        m_block_default_format.insert("PRE",preformat);
+//        QTextBlockFormat d1format=QTextBlockFormat();
+//        d1format.setProperty(QTextFormat::UserProperty,"DIVIDER1");
+//        m_block_default_format.insert("DIVIDER1",d1format);
+//        QTextBlockFormat d2format=QTextBlockFormat();
+//        d2format.setProperty(QTextFormat::UserProperty,"DIVIDER2");
+//        d2format.setTopMargin(5);
+//        d2format.setBottomMargin(5);
+//        m_block_default_format.insert("DIVIDER2",d2format);
+//        QTextBlockFormat d3format=QTextBlockFormat();
+//        d3format.setProperty(QTextFormat::UserProperty,"DIVIDER3");
+//        d3format.setTopMargin(5);
+//        d3format.setBottomMargin(10);
+//        d3format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,20));
+//        m_block_default_format.insert("DIVIDER3",d3format);
+//        QTextBlockFormat d4format=QTextBlockFormat();
+//        d4format.setProperty(QTextFormat::UserProperty,"DIVIDER4");
+//        d4format.setTopMargin(10);
+//        d4format.setBottomMargin(15);
+//        d4format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,50));
+//        m_block_default_format.insert("DIVIDER4",d4format);
+//        QTextBlockFormat d5format=QTextBlockFormat();
+//        d5format.setProperty(QTextFormat::UserProperty,"DIVIDER5");
+//        d5format.setTopMargin(15);
+//        d5format.setBottomMargin(25);
+//        d5format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,100));
+//        m_block_default_format.insert("DIVIDER5",d5format);
 
 }
 
@@ -235,6 +307,21 @@ Theme::~Theme()
 	settings.setValue("Text/Color", m_text_color.name());
 	settings.setValue("Text/Font", m_text_font.toString());
 	settings.setValue("Text/Misspelled", m_misspelled_color.name());
+
+        QHashIterator<QString,QTextBlockFormat> it(m_block_default_format);
+        while (it.hasNext()) {
+            it.next();
+            settings.setValue(QString("Styles/")+it.key()+QString("/FontWeight"),it.value().intProperty(QTextFormat::FontWeight));
+            settings.setValue(QString("Styles/")+it.key()+QString("/FontItalic"),it.value().boolProperty(QTextFormat::FontItalic));
+            settings.setValue(QString("Styles/")+it.key()+QString("/FontSizeAdjustment"),it.value().intProperty(QTextFormat::FontSizeAdjustment));
+            settings.setValue(QString("Styles/")+it.key()+QString("/BlockLeftMargin"),it.value().doubleProperty(QTextFormat::BlockLeftMargin));
+            settings.setValue(QString("Styles/")+it.key()+QString("/BlockRightMargin"),it.value().doubleProperty(QTextFormat::BlockRightMargin));
+            settings.setValue(QString("Styles/")+it.key()+QString("/BlockTopMargin"),it.value().doubleProperty(QTextFormat::BlockTopMargin));
+            settings.setValue(QString("Styles/")+it.key()+QString("/BlockBottomMargin"),it.value().doubleProperty(QTextFormat::BlockBottomMargin));
+            settings.setValue(QString("Styles/")+it.key()+QString("/BlockAlignment"),it.value().intProperty(QTextFormat::BlockAlignment));
+            settings.setValue(QString("Styles/")+it.key()+QString("/BlockTrailingHorizontalRulerWidth"),it.value().lengthProperty(QTextFormat::BlockTrailingHorizontalRulerWidth).rawValue());
+            settings.setValue(QString("Styles/")+it.key()+QString("/BlockNonBreakableLines"),it.value().boolProperty(QTextFormat::BlockNonBreakableLines));
+        }
 }
 
 //-----------------------------------------------------------------------------
