@@ -190,7 +190,7 @@ ThemeDialog::ThemeDialog(Theme& theme, QWidget* parent)
         tabs->addTab(tab, tr("Text Styling"));
         m_current_block_type = new QComboBox(tab);
 
-        m_current_block_type->addItem(tr("Default"),m_theme.defaultFormatForBlock("default"));
+        m_current_block_type->addItem(tr("Normal Paragraph"),m_theme.defaultFormatForBlock("default"));
         m_current_block_type->addItem(tr("Heading 1"),m_theme.defaultFormatForBlock("H1"));
         m_current_block_type->addItem(tr("Heading 2"),m_theme.defaultFormatForBlock("H2"));
         m_current_block_type->addItem(tr("Heading 3"),m_theme.defaultFormatForBlock("H3"));
@@ -198,7 +198,7 @@ ThemeDialog::ThemeDialog(Theme& theme, QWidget* parent)
         m_current_block_type->addItem(tr("Heading 5"),m_theme.defaultFormatForBlock("H5"));
         m_current_block_type->addItem(tr("Blockquote"),m_theme.defaultFormatForBlock("BLOCKQUOTE"));
         m_current_block_type->addItem(tr("Attribution"),m_theme.defaultFormatForBlock("ATTRIBUTION"));
-        m_current_block_type->addItem(tr("Preformatted Line"),m_theme.defaultFormatForBlock("PRE"));
+        m_current_block_type->addItem(tr("Preformatted Text"),m_theme.defaultFormatForBlock("PRE"));
         connect(m_current_block_type,SIGNAL(currentIndexChanged(int)),this,SLOT(updateStylingControls(int)));
 
         m_styling_adjustment = new QSpinBox(tab);
