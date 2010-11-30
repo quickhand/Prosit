@@ -384,7 +384,7 @@ void Document::loadTheme(const Theme& theme)
         cleanUpDocument(false);
 	centerCursor(true);
 	m_text->document()->blockSignals(false);
-
+        m_highlighter->rehighlight();
 }
 
 //-----------------------------------------------------------------------------

@@ -145,52 +145,94 @@ Theme::Theme(const QString& name)
                 if(weight!=0)
                     format.setProperty(QTextFormat::FontWeight,QFont::Bold);
             }
+            else if(thetype.startsWith("H")&&thetype.at(1).isDigit())
+                format.setProperty(QTextFormat::FontWeight,QFont::Bold);
+
             if(settings.contains(QString("Styles/")+thetype+QString("/FontItalic")))
             {
                 bool italic=settings.value(QString("Styles/")+thetype+QString("/FontItalic")).toBool();
                 if(italic)
                     format.setProperty(QTextFormat::FontItalic,true);
             }
+            else if(thetype=="BLOCKQUOTE" || thetype=="ATTRIBUTION")
+                format.setProperty(QTextFormat::FontItalic,true);
+
             if(settings.contains(QString("Styles/")+thetype+QString("/FontSizeAdjustment")))
             {
                 int adjustment=settings.value(QString("Styles/")+thetype+QString("/FontSizeAdjustment")).toInt();
                 if(adjustment!=0)
                     format.setProperty(QTextFormat::FontSizeAdjustment,adjustment);
             }
+            else if(thetype.startsWith("H")&&thetype.at(1).isDigit())
+                format.setProperty(QTextFormat::FontSizeAdjustment,4-QString(thetype.at(1)).toInt());
+
             if(settings.contains(QString("Styles/")+thetype+QString("/BlockLeftMargin")))
             {
                 double margin=settings.value(QString("Styles/")+thetype+QString("/BlockLeftMargin")).toDouble();
                 if(margin!=0)
                     format.setProperty(QTextFormat::BlockLeftMargin,margin);
             }
+            else if(thetype=="BLOCKQUOTE" || thetype=="ATTRIBUTION")
+                format.setProperty(QTextFormat::BlockLeftMargin,50.0);
+
             if(settings.contains(QString("Styles/")+thetype+QString("/BlockRightMargin")))
             {
                 double margin=settings.value(QString("Styles/")+thetype+QString("/BlockRightMargin")).toDouble();
                 if(margin!=0)
                     format.setProperty(QTextFormat::BlockRightMargin,margin);
             }
+            else if(thetype=="BLOCKQUOTE" || thetype=="ATTRIBUTION")
+                format.setProperty(QTextFormat::BlockRightMargin,50.0);
+
             if(settings.contains(QString("Styles/")+thetype+QString("/BlockTopMargin")))
             {
                 double margin=settings.value(QString("Styles/")+thetype+QString("/BlockTopMargin")).toDouble();
                 if(margin!=0)
                     format.setProperty(QTextFormat::BlockTopMargin,margin);
             }
+            else if(thetype.startsWith("DIVIDER"))
+            {
+                double arr[]={0.0,5.0,5.0,10.0,15.0};
+                int dl=QString(thetype.at(7)).toInt();
+                format.setProperty(QTextFormat::BlockTopMargin,arr[dl-1]);
+            }
+
             if(settings.contains(QString("Styles/")+thetype+QString("/BlockBottomMargin")))
             {
                 double margin=settings.value(QString("Styles/")+thetype+QString("/BlockBottomMargin")).toDouble();
                 if(margin!=0)
                     format.setProperty(QTextFormat::BlockBottomMargin,margin);
             }
+            else if(thetype.startsWith("DIVIDER"))
+            {
+                double arr[]={0.0,5.0,10.0,15.0,25.0};
+                int dl=QString(thetype.at(7)).toInt();
+                format.setProperty(QTextFormat::BlockBottomMargin,arr[dl-1]);
+            }
+            else if(thetype!="PRE")
+                format.setProperty(QTextFormat::BlockBottomMargin,10.0);
+
             if(settings.contains(QString("Styles/")+thetype+QString("/BlockAlignment")))
             {
                 int align=settings.value(QString("Styles/")+thetype+QString("/BlockAlignment")).toInt();
                 format.setProperty(QTextFormat::BlockAlignment,align);
             }
+            else if(thetype=="ATTRIBUTION")
+                format.setProperty(QTextFormat::BlockAlignment,Qt::AlignRight);
+            else
+                format.setProperty(QTextFormat::BlockAlignment,Qt::AlignLeft);
+
             if(settings.contains(QString("Styles/")+thetype+QString("/BlockTrailingHorizontalRulerWidth")))
             {
                 double rulewidth=settings.value(QString("Styles/")+thetype+QString("/BlockTrailingHorizontalRulerWidth")).toDouble();
                 if(rulewidth!=0)
                     format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,rulewidth));
+            }
+            else if(thetype.startsWith("DIVIDER"))
+            {
+                double arr[]={0.0,0.0,20.0,50.0,100.0};
+                int dl=QString(thetype.at(7)).toInt();
+                format.setProperty(QTextFormat::BlockTrailingHorizontalRulerWidth,QTextLength(QTextLength::PercentageLength,arr[dl-1]));
             }
             if(settings.contains(QString("Styles/")+thetype+QString("/BlockNonBreakableLines")))
             {
@@ -198,6 +240,9 @@ Theme::Theme(const QString& name)
                 if(nobreak)
                     format.setProperty(QTextFormat::BlockNonBreakableLines,nobreak);
             }
+            else if(thetype=="ATTRIBUTION"||thetype=="PRE")
+                format.setProperty(QTextFormat::BlockNonBreakableLines,true);
+
             if(thetype!="default")
                 format.setProperty(QTextFormat::UserProperty,thetype);
             m_block_default_format.insert(thetype,format);
@@ -627,7 +672,12 @@ void Theme::setMisspelledColor(const QColor& color)
 }
 
 //-----------------------------------------------------------------------------
-
+void Theme::setDefaultFormatForBlock(QString uprop,QTextBlockFormat& format)
+{
+    m_block_default_format.remove(uprop);
+    m_block_default_format.insert(uprop,format);
+    setChanged(true);
+}
 QTextBlockFormat Theme::defaultFormatForBlock(QString uprop) const
 {
     if(!m_block_default_format.keys().contains(uprop))

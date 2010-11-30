@@ -50,6 +50,7 @@ private slots:
 	void checkNameAvailable();
 	void renderPreview();
         void updateStylingControls(int index);
+        void updateStylingFormat();
 private:
 	void savePreview();
 

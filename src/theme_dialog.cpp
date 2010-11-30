@@ -204,33 +204,41 @@ ThemeDialog::ThemeDialog(Theme& theme, QWidget* parent)
         m_styling_adjustment = new QSpinBox(tab);
         m_styling_adjustment->setCorrectionMode(QSpinBox::CorrectToNearestValue);
         m_styling_adjustment->setRange(-5,5);
+        connect(m_styling_adjustment,SIGNAL(valueChanged(int)),this,SLOT(updateStylingFormat()));
 
         m_styling_bold = new QCheckBox(tab);
+        connect(m_styling_bold,SIGNAL(toggled(bool)),this,SLOT(updateStylingFormat()));
 
         m_styling_italic = new QCheckBox(tab);
+        connect(m_styling_italic,SIGNAL(toggled(bool)),this,SLOT(updateStylingFormat()));
 
         m_styling_align = new QComboBox(tab);
         m_styling_align->addItems(QStringList() << tr("Left") << tr("Center") << tr("Right"));
+        connect(m_styling_align,SIGNAL(currentIndexChanged(int)),this,SLOT(updateStylingFormat()));
 
         m_styling_l_margin = new QSpinBox(tab);
         m_styling_l_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
         m_styling_l_margin->setSuffix(tr(" pixels"));
         m_styling_l_margin->setRange(0, 250);
+        connect(m_styling_l_margin,SIGNAL(valueChanged(int)),this,SLOT(updateStylingFormat()));
 
         m_styling_r_margin = new QSpinBox(tab);
         m_styling_r_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
         m_styling_r_margin->setSuffix(tr(" pixels"));
         m_styling_r_margin->setRange(0, 250);
+        connect(m_styling_r_margin,SIGNAL(valueChanged(int)),this,SLOT(updateStylingFormat()));
 
         m_styling_t_margin = new QSpinBox(tab);
         m_styling_t_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
         m_styling_t_margin->setSuffix(tr(" pixels"));
         m_styling_t_margin->setRange(0, 250);
+        connect(m_styling_t_margin,SIGNAL(valueChanged(int)),this,SLOT(updateStylingFormat()));
 
         m_styling_b_margin = new QSpinBox(tab);
         m_styling_b_margin->setCorrectionMode(QSpinBox::CorrectToNearestValue);
         m_styling_b_margin->setSuffix(tr(" pixels"));
         m_styling_b_margin->setRange(0, 250);
+        connect(m_styling_b_margin,SIGNAL(valueChanged(int)),this,SLOT(updateStylingFormat()));
 
         QVBoxLayout* styling_layout = new QVBoxLayout(tab);
         QFormLayout* styling_options_layout = new QFormLayout();
@@ -305,6 +313,15 @@ void ThemeDialog::accept()
 	m_theme.setTextColor(m_text_color->color());
 	m_theme.setTextFont(QFont(m_font_names->currentFont().family(), m_font_sizes->currentText().toInt()));
 	m_theme.setMisspelledColor(m_misspelled_color->color());
+
+        for(int index=0;index<m_current_block_type->count();index++)
+        {
+            QTextBlockFormat bf=m_current_block_type->itemData(index).value<QTextFormat>().toBlockFormat();
+            QString uprop=bf.stringProperty(QTextFormat::UserProperty);
+            if(uprop=="")
+                uprop="default";
+            m_theme.setDefaultFormatForBlock(uprop,bf);
+        }
 
 	savePreview();
 
@@ -390,4 +407,56 @@ void ThemeDialog::updateStylingControls(int index)
     m_styling_r_margin->setValue((int)bf.doubleProperty(QTextFormat::BlockRightMargin));
     m_styling_t_margin->setValue((int)bf.doubleProperty(QTextFormat::BlockTopMargin));
     m_styling_b_margin->setValue((int)bf.doubleProperty(QTextFormat::BlockBottomMargin));
+}
+
+//----------
+
+void ThemeDialog::updateStylingFormat()
+{
+    int index=m_current_block_type->currentIndex();
+
+    QTextBlockFormat bf=m_current_block_type->itemData(index).value<QTextFormat>().toBlockFormat();
+    if(m_styling_bold->isChecked())
+        bf.setProperty(QTextFormat::FontWeight,QFont::Bold);
+    else
+        bf.clearProperty(QTextFormat::FontWeight);
+
+    if(m_styling_italic->isChecked())
+        bf.setProperty(QTextFormat::FontItalic,true);
+    else
+        bf.clearProperty(QTextFormat::FontItalic);
+
+    if(m_styling_adjustment->value()!=0)
+        bf.setProperty(QTextFormat::FontSizeAdjustment,m_styling_adjustment->value());
+    else
+        bf.clearProperty(QTextFormat::FontSizeAdjustment);
+
+    if(m_styling_align->currentIndex()==2)
+        bf.setProperty(QTextFormat::BlockAlignment,Qt::AlignRight);
+    else if(m_styling_align->currentIndex()==1)
+        bf.setProperty(QTextFormat::BlockAlignment,Qt::AlignCenter);
+    else
+        bf.setProperty(QTextFormat::BlockAlignment,Qt::AlignLeft);
+
+    if(m_styling_l_margin->value()!=0)
+        bf.setProperty(QTextFormat::BlockLeftMargin,(double)m_styling_l_margin->value());
+    else
+        bf.clearProperty(QTextFormat::BlockLeftMargin);
+
+    if(m_styling_r_margin->value()!=0)
+        bf.setProperty(QTextFormat::BlockRightMargin,(double)m_styling_r_margin->value());
+    else
+        bf.clearProperty(QTextFormat::BlockRightMargin);
+
+    if(m_styling_t_margin->value()!=0)
+        bf.setProperty(QTextFormat::BlockTopMargin,(double)m_styling_t_margin->value());
+    else
+        bf.clearProperty(QTextFormat::BlockTopMargin);
+
+    if(m_styling_b_margin->value()!=0)
+        bf.setProperty(QTextFormat::BlockBottomMargin,(double)m_styling_b_margin->value());
+    else
+        bf.clearProperty(QTextFormat::BlockBottomMargin);
+
+    m_current_block_type->setItemData(index,bf);
 }

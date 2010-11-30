@@ -84,6 +84,7 @@ public:
 	void setMisspelledColor(const QColor& color);
         QTextBlockFormat defaultFormatForBlock(QString uprop) const;
         QStringList definedDefaultFormatsForBlocks() const;
+        void setDefaultFormatForBlock(QString uprop,QTextBlockFormat& format);
 
 private:
 	static QString m_path;

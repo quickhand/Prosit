@@ -45,6 +45,10 @@ protected:
 			m_changed = true;
 		}
 	}
+        void setChanged(bool changed)
+        {
+            m_changed=changed;
+        }
 
 private:
 	bool m_changed;
