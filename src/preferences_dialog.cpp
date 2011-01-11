@@ -398,7 +398,12 @@ void PreferencesDialog::addLanguage()
 				dictionaries += dictionary;
 			}
 		}
-
+		
+		// Check for dictionaries
+		if (dictionaries.isEmpty()) {
+			throw tr("The archive does not contain a usable dictionary.");
+		}
+		
 		// Extract files
 		QDir dir(Dictionary::path());
 		dir.mkdir("install");

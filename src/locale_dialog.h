@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2010 Marc Lajoie <manorapide@gmail.com>
+ * Copyright (C) 2010 Graeme Gott <graeme@gottcode.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,32 @@
  *
  ***********************************************************************/
 
-#ifndef PROSEUP_READER_H
-#define PROSEUP_READER_H
+#ifndef LOCALE_DIALOG_H
+#define LOCALE_DIALOG_H
 
-#include "tokenizer.h"
+#include <QDialog>
+class QComboBox;
 
-#include <QCoreApplication>
-#include <QStack>
-#include <QTextBlockFormat>
-#include <QTextCharFormat>
-#include <QTextCursor>
-class QString;
-
-namespace PROSEUP
+class LocaleDialog : public QDialog
 {
-	class Reader
-	{
-		Q_DECLARE_TR_FUNCTIONS(Reader)
+	Q_OBJECT
 
-	public:
-		Reader();
-		QString errorString() const;
-		bool hasError() const;
-                void read(const QString& filename, QTextDocument* text);
+public:
+	LocaleDialog(QWidget* parent = 0);
 
-	private:
-		Tokenizer m_token;
-		QString m_error;
-		QTextDocument* m_text;
-		QTextCursor m_cursor;
-	};
-}
+	static void loadTranslator();
+
+public slots:
+	virtual void accept();
+
+private:
+	static QStringList findTranslations();
+
+private:
+	QComboBox* m_translations;
+
+	static QString m_current;
+	static QString m_path;
+};
 
 #endif

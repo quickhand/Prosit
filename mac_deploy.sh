@@ -2,7 +2,7 @@
 
 APP='Prosit'
 BUNDLE="$APP.app"
-VERSION='1.3.1'
+VERSION='1.3.2.1'
 
 # Create disk folder
 echo -n 'Copying application bundle... '

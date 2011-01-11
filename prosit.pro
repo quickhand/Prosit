@@ -45,6 +45,7 @@ HEADERS += src/alert.h \
 	src/highlighter.h \
 	src/image_button.h \
 	src/load_screen.h \
+	src/locale_dialog.h \
 	src/preferences.h \
 	src/preferences_dialog.h \
 	src/session.h \
@@ -78,6 +79,7 @@ SOURCES += src/alert.cpp \
 	src/highlighter.cpp \
 	src/image_button.cpp \
 	src/load_screen.cpp \
+	src/locale_dialog.cpp \
 	src/main.cpp \
 	src/preferences.cpp \
 	src/preferences_dialog.cpp \
@@ -100,12 +102,13 @@ SOURCES += src/alert.cpp \
     src/highlight_dialog.cpp \
     src/editor.cpp
 
-TRANSLATIONS = translations/prosit_en.ts \
-	translations/prosit_es.ts \
-	translations/prosit_fr.ts \
-	translations/prosit_pl.ts \
-	translations/prosit_pt.ts \
-	translations/prosit_pt_BR.ts
+TRANSLATIONS = translations/en_US.ts \
+	translations/cs.ts \
+	translations/es.ts \
+	translations/fr.ts \
+	translations/pl.ts \
+	translations/pt.ts \
+	translations/pt_BR.ts
 
 RESOURCES = icons/icons.qrc
 macx {

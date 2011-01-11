@@ -1,7 +1,7 @@
 @ECHO OFF
 
 SET APP=Prosit
-SET VERSION=1.3.1
+SET VERSION=1.3.2.1
 
 ECHO Copying executable
 MKDIR %APP%
@@ -54,8 +54,6 @@ COPY %QTDIR%\plugins\imageformats\qmng4.dll %APP%\imageformats >nul
 COPY %QTDIR%\plugins\imageformats\qsvg4.dll %APP%\imageformats >nul
 COPY %QTDIR%\plugins\imageformats\qtiff4.dll %APP%\imageformats >nul
 
-ECHO Packing files
-upx --lzma --best %APP%\*.exe %APP%\*.dll %APP%\imageformats\*.dll >nul
 
 ECHO Creating compressed file
 CD %APP%

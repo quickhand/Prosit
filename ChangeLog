@@ -1,3 +1,7 @@
+2011-01-11 Marc Lajoie <manorapide@gmail.com>
+	* Merged Focuswriter 1.3.2.1 upstream changes
+	* Tag version 1.3.2.1.
+
 2010-11-30 Marc Lajoie <manorapide@gmail.com>
 	* Implemented extended theming, ie. text styling (in themes)
 	* Tag version 1.3.1.1.

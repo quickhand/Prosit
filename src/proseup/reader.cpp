@@ -49,7 +49,7 @@ bool PROSEUP::Reader::hasError() const
 
 //-----------------------------------------------------------------------------
 
-void PROSEUP::Reader::read(const QString& filename, Editor* text)
+void PROSEUP::Reader::read(const QString& filename, QTextDocument* text)
 {
     QStringList tokennames;
     tokennames.append("HEADING");
@@ -69,12 +69,15 @@ void PROSEUP::Reader::read(const QString& filename, Editor* text)
 	try {
 		// Open file
 		m_text = 0;
+		if (!m_cursor.isNull()) {
+			m_cursor = QTextCursor();
+		}
 		QFile file(filename);
 		if (!file.open(QFile::ReadOnly)) {
 			return;
 		}
 		m_text = text;
-		m_text->setUndoRedoEnabled(false);
+		m_cursor = QTextCursor(m_text);
 
 
                 QList<Token> tokenlist=m_token.tokenize(&file);
@@ -83,7 +86,7 @@ void PROSEUP::Reader::read(const QString& filename, Editor* text)
                 {
                     Token cur=tokenlist[i];
                     if(cur.ttype==PROSEUP::TEXT)
-                        text->textCursor().insertText(cur.data[0],curformat);
+                        m_cursor.insertText(cur.data[0],curformat);
                     else if(cur.ttype==PROSEUP::EMPH)
                         curformat.setFontItalic(cur.is_start&&!cur.is_end);
                     else if(cur.ttype==PROSEUP::STRONG)
@@ -139,12 +142,12 @@ void PROSEUP::Reader::read(const QString& filename, Editor* text)
                                 curblockfmt.setProperty(QTextFormat::UserProperty,QString("PRE"));
                             else if(cur.ttype==PROSEUP::DIVIDER)
                                 curblockfmt.setProperty(QTextFormat::UserProperty,QString("DIVIDER")+cur.data[0]);
-                            if(text->textCursor().atStart())
+                            if(m_cursor.atStart())
                             {
                                 //QTextBlockFormat temp=QTextBlockFormat(text->textCursor().blockFormat());
                                 //temp.merge(curblockfmt);
-                                text->textCursor().setBlockFormat(curblockfmt);
-                                text->textCursor().setCharFormat(curformat);
+                                m_cursor.setBlockFormat(curblockfmt);
+                                m_cursor.setCharFormat(curformat);
                             }
                             else
                             {
@@ -152,7 +155,7 @@ void PROSEUP::Reader::read(const QString& filename, Editor* text)
                                 //temp.merge(curblockfmt);
                                 //std::cout<<"Inserting: "<<temp.stringProperty(QTextFormat::UserProperty).toStdString()<<std::endl;
                                 //text->textCursor().setBlockFormat(temp);
-                                text->textCursor().insertBlock(curblockfmt,curformat);
+                                m_cursor.insertBlock(curblockfmt,curformat);
                             }
                         }
                         if(cur.is_end)
@@ -170,6 +173,5 @@ void PROSEUP::Reader::read(const QString& filename, Editor* text)
 	} catch (const QString& error) {
 		m_error = error;
 	}
-	m_text->setUndoRedoEnabled(true);
 }
 

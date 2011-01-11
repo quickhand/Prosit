@@ -19,6 +19,7 @@
  ***********************************************************************/
 
 #include "dictionary.h"
+#include "locale_dialog.h"
 #include "session.h"
 #include "sound.h"
 #include "theme.h"
@@ -37,7 +38,7 @@ int main(int argc, char** argv)
 {
 	QApplication app(argc, argv);
 	app.setApplicationName("Prosit");
-	app.setApplicationVersion("1.3.1");
+	app.setApplicationVersion("1.3.2.1");
 	app.setOrganizationDomain("quickhand.org");
 	app.setOrganizationName("Quickhand");
 	QString appdir = app.applicationDirPath();
@@ -46,28 +47,6 @@ int main(int argc, char** argv)
 	paths.prepend(appdir + "/../share/prosit/icons");
 	paths.prepend(appdir + "/icons/oxygen");
 	QIcon::setThemeSearchPaths(paths);
-
-	QTranslator qt_translator;
-	qt_translator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-	app.installTranslator(&qt_translator);
-
-	paths.clear();
-	paths.append(appdir + "/translations/");
-	paths.append(appdir + "/../share/prosit/translations/");
-	paths.append(appdir + "/../Resources/translations");
-	QString translator_path;
-	foreach (const QString& path, paths) {
-		if (QFile::exists(path)) {
-			translator_path = path;
-			break;
-		}
-	}
-
-	QTranslator translator;
-	if (!translator.load("prosit_" + QLocale::system().name(), translator_path)) {
-		translator.load("prosit_en", translator_path);
-	}
-	app.installTranslator(&translator);
 
 	paths.clear();
 	paths.append(appdir + "/sounds/");
@@ -124,6 +103,9 @@ int main(int argc, char** argv)
 		QSettings::setDefaultFormat(QSettings::IniFormat);
 		QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, path + "/Settings");
 	}
+
+	// Load application language
+	LocaleDialog::loadTranslator();
 
 	// Create base data path
 	QDir dir;
